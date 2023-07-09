@@ -1,0 +1,153 @@
+.travel-package-grid {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .travel-package-item {
+    width: 33.33%;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  .travel-package-item.last-in-row {
+    margin-right: 0;
+  }
+  
+  .travel-package-item img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .travel-package-item h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .travel-package-item p {
+    font-size: 14px;
+  }
+  
+  @media (max-width: 767px) {
+    .travel-package-item {
+      width: 100%;
+      margin-right: 0;
+    }
+  }
+
+  .travel-package-title {
+    font-size: 14;
+    color: black;
+  }
+
+  .travel-package-duration {
+    font-size: 14;
+    color: black;
+  }
+
+  .travel-package-thumbnail {
+    position: relative;
+    overflow: hidden;
+    height: 200px;
+    border-radius: 16px;
+}
+
+.travel-package-thumbnail img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.thumbnail-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 0 0 16px 16px;
+    color: white;
+}
+
+.thumbnail-overlay > div {
+    margin-bottom: 5px;
+}
+
+.thumbnail-overlay > div i {
+    margin-right: 5px;
+}
+
+.thumbnail-overlay .travel-package-duration-thumb,
+.thumbnail-overlay .travel-package-country {
+    font-weight: lighter;
+}
+
+.thumbnail-overlay .travel-package-cost2pax div {
+    font-weight: lighter;
+}
+
+@media (max-width: 768px) {
+  .thumbnail-overlay {
+      font-size: 12px;
+  }
+}
+
+.travel-package-thumbnail-title {
+  padding: 10px;
+}
+
+.travel-package-search-box {
+  padding: 10px;
+}
+
+  hr.clear-line {
+    margin-top: 20px !important;
+    padding: 20px !important;
+    border: none;
+    border-top: 1px solid black;
+  }
+
+  hr.clear-line-white {
+    border: none;
+    border-top: 1px solid whitesmoke;
+  }
+
+ .cost-box {
+    padding: 10px 0;
+  }
+
+
+  /* Template CSS */
+  .container {
+    max-width: 1302px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      padding: 0 20px;
+    }
+  }
+  
+  .package-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  .package-detail-thumbnail img {
+    display: block;
+    max-width: 100%;
+    height: 400px;
+    margin: 0 auto;
+  }
+  
+  .package-title + * {
+    margin-top: 20px;
+  }
+  
+  .custom-attribute {
+    margin-bottom: 10px;
+  }
+  
