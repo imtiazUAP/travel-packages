@@ -24,56 +24,181 @@ get_header();
 
                 // Display the post image
                 $package_image = get_the_post_thumbnail_url($package->ID, 'large');
-                if ($package_image) {
-                    echo '<div class="package-detail-thumbnail">';
-                    echo '<img src="' . esc_url($package_image) . '" alt="' . get_the_title($package) . '" />';
-                    echo '</div>';
-                }
-
-                echo apply_filters('the_content', $package->post_content);
-
                 // Display custom attributes
                 $country = get_post_meta($package->ID, 'country', true);
-                $cost = get_post_meta($package->ID, 'cost', true);
-                $duration = get_post_meta($package->ID, 'duration', true);
+                $cost2pax = get_post_meta($package->ID, 'cost2pax', true);
+                $cost4pax = get_post_meta($package->ID, 'cost4pax', true);
+                $cost6pax = get_post_meta($package->ID, 'cost6pax', true);
+                $cost8pax = get_post_meta($package->ID, 'cost8pax', true);
+                $duration_days = get_post_meta($package->ID, 'duration_days', true);
+                $duration_nights = get_post_meta($package->ID, 'duration_nights', true);
                 $map_url = get_post_meta($package->ID, 'map_url', true);
                 $package_includes = get_post_meta($package->ID, 'package_includes', true);
                 $package_excludes = get_post_meta($package->ID, 'package_excludes', true);
+                $highlights = get_post_meta($package->ID, 'highlights', true);
+                $general_conditions = get_post_meta($package->ID, 'general_conditions', true);
+                $cancellation_policy = get_post_meta($package->ID, 'cancellation_policy', true);
+                $notes = get_post_meta($package->ID, 'notes', true);
                 // TODO - START
                 $photo_album = get_post_meta($package->ID, 'photo_album', true);
                 // TODO - END
+                ?>
+                <div class="photo-detail-flexbox">
+                    <div class="photo-flex">
+                        <?php
+                            if ($package_image) {
+                                echo '<div class="package-detail-thumbnail">';
+                                echo '<img src="' . esc_url($package_image) . '" alt="' . get_the_title($package) . '" />';
+                                echo '</div>';
+                            }
+                        ?>
+                    </div>
+                    <div class="cost-duration-country-flex">
+                        <div class="country-detail">
+                            <div>
+                                <label><Strong>Country:</Strong></label>
+                            </div>
+                            <div class="country">
+                                <?php
+                                    if (!empty($country)) {
+                                        echo '<i class="fas fa-map-marker-alt"></i> <span>'. esc_html(ucfirst($country)) . '</span>';
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                        <div class="duration-detail">
+                            <div>
+                                <label><Strong>Duration Detail:</Strong></label>
+                            </div>
+                            <div class="duration">
+                                <?php
+                                    if (!empty($duration_days) && !empty($duration_nights)) {
+                                        echo '<i class="fa-regular fa-clock"></i> <span>'. esc_html($duration_days) . ' Days ' . esc_html($duration_nights) . ' Nights</span>';
+                                    }
+                                ?>
+                            </div>
+                        </div> 
+                        <div class="cost-detail">
+                            <div>
+                                <label><Strong>Cost Detail:</Strong></label>
+                            </div>
+                            <div class="cost">
+                                <?php
+                                    if (!empty($cost2pax)) {
+                                        echo '<i class="fas fa-user"></i><strong>x2</strong><span> person group: ' . esc_html($cost2pax) . ' per person</span><br>';
+                                    }
+                                    if (!empty($cost4pax)) {
+                                        echo '<i class="fas fa-user"></i><strong>x4</strong><span> person group: ' . esc_html($cost4pax) . ' per person</span><br>';
+                                    }
+                                    if (!empty($cost6pax)) {
+                                        echo '<i class="fas fa-user"></i><strong>x6</strong><span> person group: ' . esc_html($cost6pax) . ' per person</span><br>';
+                                    }
+                                    if (!empty($cost8pax)) {
+                                        echo '<i class="fas fa-user"></i><strong>x8</strong><span> person group: ' . esc_html($cost8pax) . ' per person</span><br>';
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="travel-plan">
+                    <h3>Our Travel Plan</h3>
+                </div>
+                <div class="package-detail">
+                    <?php echo apply_filters('the_content', $package->post_content);?>
+                </div>
 
-                if (!empty($country)) {
-                    echo '<p>Country: ' . esc_html($country) . '</p>';
-                }
+                <div class="package-include-exclue"><?php
+                    if (!empty($package_includes)) { ?>
+                        <div class="package-includes">
+                            <div>
+                                <label><Strong>Package Includes:</Strong></label>
+                            </div>
+                            <div>
+                                <?php echo wp_kses_post($package_includes); ?>
+                            </div>
+                        </div>
+                    <?php
+                    }
 
-                if (!empty($cost)) {
-                    echo '<p>cost: ' . esc_html($cost) . '</p>';
-                }
+                    if (!empty($package_excludes)) { ?>
+                        <div class="package-excludes">
+                            <div>
+                                <label><Strong>Package Excludes:</Strong></label>
+                            </div>
+                            <div>
+                                <?php echo wp_kses_post($package_excludes); ?>
+                            </div>
+                        </div>
+                    <?php
+                    }
+                ?></div>
 
-                if (!empty($duration)) {
-                    echo '<p>Duration: ' . esc_html($duration) . '</p>';
-                }
-                
+                <div class="tabs">
+                    <div class="tab">
+                        <button class="tablinks" onclick="openTab(event, 'TravelMap')" id="defaultOpen">Travel Map</button>
+                        <button class="tablinks" onclick="openTab(event, 'Highlights')">Highlights</button>
+                        <button class="tablinks" onclick="openTab(event, 'GeneralCondition')">General Condition</button>
+                        <button class="tablinks" onclick="openTab(event, 'CancellationPolicy')">Cancellation Policy</button>
+                        <button class="tablinks" onclick="openTab(event, 'Notes')">Special Notes</button>
+                    </div>
 
-                if (!empty($map_url)) {
-                    echo '<p>Map URL: ' . esc_html($map_url) . '</p>';
-                }
+                    <div id="TravelMap" class="tabcontent">
+                        <div class="map-view">
+                        <?php
+                            if (!empty($map_url)) {
+                                echo '<iframe src="'. esc_html($map_url) .'" width="100%" height="380px"></iframe>';
+                            }
+                        ?>
+                        </div>
+                    </div>
 
-                if (!empty($map_url)) {
-                    echo '<iframe src="'. esc_html($map_url) .'" width="640" height="480"></iframe>';
-                }
+                    <div id="Highlights" class="tabcontent">
+                    <?php
+                        if (!empty($highlights)) { ?>
+                            <div class="highlights">
+                                <?php echo wp_kses_post(nl2br($highlights)); ?>
+                            </div>
+                        <?php
+                        }
+                    ?>
+                    </div>
 
-                if (!empty($package_includes)) {
-                    echo '<p>Package Includes:</p>';
-                    echo wp_kses_post($package_includes);
-                }
-                
-                if (!empty($package_excludes)) {
-                    echo '<p>Package Excludes:</p>';
-                    echo wp_kses_post($package_excludes);
-                }
+                    <div id="GeneralCondition" class="tabcontent">
+                    <?php
+                        if (!empty($general_conditions)) { ?>
+                            <div class="general-conditions">
+                                <?php echo wp_kses_post(nl2br($general_conditions)); ?>
+                            </div>
+                        <?php
+                        }
+                    ?>
+                    </div>
 
+                    <div id="CancellationPolicy" class="tabcontent">
+                    <?php
+                        if (!empty($cancellation_policy)) { ?>
+                            <div class="cancellation-policy">
+                                <?php echo wp_kses_post(nl2br($cancellation_policy)); ?>
+                            </div>
+                        <?php
+                        }
+                    ?>
+                    </div>
+
+                    <div id="Notes" class="tabcontent">
+                    <?php
+                        if (!empty($notes)) { ?>
+                            <div class="notes">
+                                <?php echo wp_kses_post(nl2br($notes)); ?>
+                            </div>
+                        <?php
+                        }
+                    ?>
+                    </div>
+                </div>
+
+                <?php
                 // TODO - START
                 if (!empty($photo_album)) {
                     echo '<div class="photo-album">';

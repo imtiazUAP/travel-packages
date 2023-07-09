@@ -102,11 +102,19 @@ function render_travel_package_details_meta_box($post)
     $cost4pax = get_post_meta($post->ID, 'cost4pax', true);
     $cost6pax = get_post_meta($post->ID, 'cost6pax', true);
     $cost8pax = get_post_meta($post->ID, 'cost8pax', true);
-    $duration = get_post_meta($post->ID, 'duration', true);
+    $durationDays = get_post_meta($post->ID, 'duration_days', true);
+    $durationNights = get_post_meta($post->ID, 'duration_nights', true);
     $end_date = get_post_meta($post->ID, 'end_date', true);
     $map_url = get_post_meta($post->ID, 'map_url', true);
     $package_includes = get_post_meta($post->ID, 'package_includes', true);
     $package_excludes = get_post_meta($post->ID, 'package_excludes', true);
+
+    $highlights = get_post_meta($post->ID, 'highlights', true);
+    $general_conditions = get_post_meta($post->ID, 'general_conditions', true);
+
+    $cancellation_policy = get_post_meta($post->ID, 'cancellation_policy', true);
+    $notes = get_post_meta($post->ID, 'notes', true);
+
     $photos = get_post_meta($post->ID, 'photos', true);
 
     // Output the HTML form fields for each custom attribute
@@ -131,11 +139,10 @@ function render_travel_package_details_meta_box($post)
         </div>
 
         <div style="flex-basis: 50%;">
-            <label for="duration"><Strong>
-                    <?php _e('Duration:', 'travel-packages'); ?>
-                </Strong></label>
-            <input type="text" id="duration" name="duration" placeholder="4 Nights 5 Days"
-                value="<?php echo esc_attr($duration); ?>">
+            <label for="duration_days"><Strong><?php _e('Days:', 'travel-packages'); ?></Strong></label>
+            <input type="text" id="duration_days" name="duration_days" placeholder="4" value="<?php echo esc_attr($durationDays); ?>">
+            <label for="duration_nights"><Strong><?php _e('Nights:', 'travel-packages'); ?></Strong></label>
+            <input type="text" id="duration_nights" name="duration_nights" placeholder="5" value="<?php echo esc_attr($durationNights); ?>">
         </div>
     </div>
 
@@ -207,6 +214,36 @@ function render_travel_package_details_meta_box($post)
         </div>
     </div>
 
+    <div style="display: flex;">
+        <div style="width: 50%; margin-right: 10px;">
+            <label for="highlights">
+                <?php _e('Highlights:', 'travel-packages'); ?>
+            </label>
+            <?php wp_editor($highlights, 'highlights', array('textarea_name' => 'highlights')); ?>
+        </div>
+        <div style="width: 50%;">
+            <label for="general_conditions">
+                <?php _e('General Conditions:', 'travel-packages'); ?>
+            </label>
+            <?php wp_editor($general_conditions, 'general_conditions', array('textarea_name' => 'general_conditions')); ?>
+        </div>
+    </div>
+
+    <div style="display: flex;">
+        <div style="width: 50%; margin-right: 10px;">
+            <label for="cancellation_policy">
+                <?php _e('Cancellation Policy:', 'travel-packages'); ?>
+            </label>
+            <?php wp_editor($cancellation_policy, 'cancellation_policy', array('textarea_name' => 'cancellation_policy')); ?>
+        </div>
+        <div style="width: 50%;">
+            <label for="notes">
+                <?php _e('Special Notes:', 'travel-packages'); ?>
+            </label>
+            <?php wp_editor($notes, 'notes', array('textarea_name' => 'notes')); ?>
+        </div>
+    </div>
+
     <hr class="clear-line">
     <!-- // TODO - START -->
     <div>
@@ -252,8 +289,12 @@ function save_travel_package_details($post_id)
     }
 
 
-    if (isset($_POST['duration'])) {
-        update_post_meta($post_id, 'duration', sanitize_text_field($_POST['duration']));
+    if (isset($_POST['duration_days'])) {
+        update_post_meta($post_id, 'duration_days', sanitize_text_field($_POST['duration_days']));
+    }
+
+    if (isset($_POST['duration_nights'])) {
+        update_post_meta($post_id, 'duration_nights', sanitize_text_field($_POST['duration_nights']));
     }
 
     if (isset($_POST['map_url'])) {
@@ -266,6 +307,22 @@ function save_travel_package_details($post_id)
 
     if (isset($_POST['package_excludes'])) {
         update_post_meta($post_id, 'package_excludes', wp_kses_post($_POST['package_excludes']));
+    }
+
+    if (isset($_POST['highlights'])) {
+        update_post_meta($post_id, 'highlights', wp_kses_post($_POST['highlights']));
+    }
+
+    if (isset($_POST['general_conditions'])) {
+        update_post_meta($post_id, 'general_conditions', wp_kses_post($_POST['general_conditions']));
+    }
+
+    if (isset($_POST['cancellation_policy'])) {
+        update_post_meta($post_id, 'cancellation_policy', wp_kses_post($_POST['cancellation_policy']));
+    }
+
+    if (isset($_POST['notes'])) {
+        update_post_meta($post_id, 'notes', wp_kses_post($_POST['notes']));
     }
     // TODO - START
     if (isset($_FILES['photos'])) {
@@ -307,6 +364,13 @@ function enqueue_travel_package_styles()
 }
 add_action('wp_enqueue_scripts', 'enqueue_travel_package_styles');
 
+function enqueue_custom_script() {
+    // Enqueue the custom JavaScript file
+    wp_enqueue_script('custom-script', plugin_dir_url(__FILE__) . 'js/custom-script.js', array('jquery'), '1.0', true);
+}
+
+add_action('wp_enqueue_scripts', 'enqueue_custom_script');
+
 // Shortcode for displaying travel packages
 function travel_packages_shortcode($atts)
 {
@@ -314,7 +378,9 @@ function travel_packages_shortcode($atts)
     $atts = shortcode_atts(
         array(
             'limit' => -1,
-        ), $atts);
+        ),
+        $atts
+    );
 
     $args = array(
         'post_type' => 'travel-package',
@@ -322,20 +388,37 @@ function travel_packages_shortcode($atts)
     );
 
     $packages = new WP_Query($args);
+    $country_names = array();
+    if ($packages->have_posts()) {
+        while ($packages->have_posts()) {
+            $packages->the_post();
+
+            // Retrieve the country attribute value for the current post
+            $country_value = get_post_meta(get_the_ID(), 'country', true);
+
+            // Capitalize the first letter of the country value
+            $country_name = ucfirst(strtolower($country_value));
+
+            // Add the country name to the array if it doesn't exist
+            if (!in_array($country_name, $country_names)) {
+                $country_names[] = $country_name;
+            }
+        }
+        wp_reset_postdata();
+    }
 
     ob_start();
-
     if ($packages->have_posts()) {
         $package_count = 0;
         ?>
-        <div class="travel-package-search-box">
-            <form id="package-filter-form" style="display: flex;">
-                <div style="flex-basis: 82%;">
-                    <select id="country-filter" name="country-filter" style="height: 50px;">
+        <div>
+            <form id="package-filter-form" class="travel-package-search-box">
+                <div class="form-group select-box">
+                    <select id="country-filter" name="country-filter" style="height: 50px; width: 100%;">
                         <option value="" disabled selected>Select a Country</option>
                         <option value="">All Country</option>
                         <?php
-                        foreach ($countries as $index => $country) {
+                        foreach ($country_names as $index => $country) {
                             $selected = '';
                             if (isset($_GET['country-filter']) && $_GET['country-filter'] === $country) {
                                 $selected = 'selected';
@@ -345,12 +428,10 @@ function travel_packages_shortcode($atts)
                         ?>
                     </select>
                 </div>
-                <div style="flex-basis: 15%; margin-left: auto;">
-                    <div style="position: relative; display: inline-block;">
-                        <span class="fa fa-search"
-                            style="color: white; position: absolute; top: 50%; left: 10px; transform: translateY(-50%);"></span>
-                        <input type="submit" value="Find Packages"
-                            style="height: 50px; padding-right: 30px; padding-left: 35px; width: 100%;">
+                <div class="form-group search-button">
+                    <div style="position: relative;">
+                        <span class="fa fa-search" style="color: white; position: absolute; top: 50%; left: 10px; transform: translateY(-50%);"></span>
+                        <input type="submit" value="Find Travel Packages" style="height: 50px; width: 100%;">
                     </div>
                 </div>
             </form>
@@ -373,7 +454,8 @@ function travel_packages_shortcode($atts)
             $package_description = wp_trim_words(get_the_content(), 20);
 
             // Retrieve the value of the cost2pax custom attribute
-            $duration = get_post_meta(get_the_ID(), 'duration', true);
+            $durationDays = get_post_meta(get_the_ID(), 'duration_days', true);
+            $durationNights = get_post_meta(get_the_ID(), 'duration_nights', true);
             $country = get_post_meta(get_the_ID(), 'country', true);
 
             $cost2pax = get_post_meta(get_the_ID(), 'cost2pax', true);
@@ -396,7 +478,7 @@ function travel_packages_shortcode($atts)
                             <div style="display: flex;">
                                 <div class="travel-package-duration-thumb" style="width: 50%;">
                                     <i class="fa-regular fa-clock"></i>
-                                    <?php echo $duration; ?>
+                                    <?php echo $durationDays; ?> Days <?php echo $durationNights; ?> Nights
                                 </div>
                                 <div class="travel-package-country" style="width: 50%;">
                                     <i class="fas fa-map-marker-alt"></i>
