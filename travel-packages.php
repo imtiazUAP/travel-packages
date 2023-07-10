@@ -13,35 +13,45 @@ License: GPL2
 // Define a global variable
 global $countries;
 $countries = array(
-    'Australia',
-    'Bangladesh',
-    'Belgium',
-    'Bhutan',
-    'Brazil',
-    'Cambodia',
-    'Cameroon',
-    'Canada',
-    'China',
-    'Egypt',
-    'India',
-    'Indonesia',
-    'Malaysia',
-    'Nepal',
-    'Netherlands',
-    'New Zealand',
-    'Pakistan',
-    'Portugal',
-    'Qatar',
-    'Russia',
-    'Saudi Arabia',
-    'Singapore',
-    'Sri Lanka',
-    'Switzerland',
-    'Thailand',
-    'Turkey',
-    'United Arab Emirates',
-    'United Kingdom',
-    'United States of America'
+    'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola',
+    'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria',
+    'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados',
+    'Belarus', 'Belgium', 'Belize', 'Benin', 'Bhutan',
+    'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'Brunei',
+    'Bulgaria', 'Burkina Faso', 'Burundi', 'Cabo Verde', 'Cambodia',
+    'Cameroon', 'Canada', 'Central African Republic', 'Chad', 'Chile',
+    'China', 'Colombia', 'Comoros', 'Congo', 'Costa Rica',
+    'Croatia', 'Cuba', 'Cyprus', 'Czech Republic', 'Denmark',
+    'Djibouti', 'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt',
+    'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Eswatini',
+    'Ethiopia', 'Fiji', 'Finland', 'France', 'Gabon',
+    'Gambia', 'Georgia', 'Germany', 'Ghana', 'Greece',
+    'Grenada', 'Guatemala', 'Guinea', 'Guinea-Bissau', 'Guyana',
+    'Haiti', 'Honduras', 'Hungary', 'Iceland', 'India',
+    'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel',
+    'Italy', 'Jamaica', 'Japan', 'Jordan', 'Kazakhstan',
+    'Kenya', 'Kiribati', 'Korea, North', 'Korea, South', 'Kosovo',
+    'Kuwait', 'Kyrgyzstan', 'Laos', 'Latvia', 'Lebanon',
+    'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania',
+    'Luxembourg', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives',
+    'Mali', 'Malta', 'Marshall Islands', 'Mauritania', 'Mauritius',
+    'Mexico', 'Micronesia', 'Moldova', 'Monaco', 'Mongolia',
+    'Montenegro', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia',
+    'Nauru', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua',
+    'Niger', 'Nigeria', 'North Macedonia', 'Norway', 'Oman',
+    'Pakistan', 'Palau', 'Panama', 'Papua New Guinea', 'Paraguay',
+    'Peru', 'Philippines', 'Poland', 'Portugal', 'Qatar',
+    'Romania', 'Russia', 'Rwanda', 'Saint Kitts and Nevis', 'Saint Lucia',
+    'Saint Vincent and the Grenadines', 'Samoa', 'San Marino', 'Sao Tome and Principe',
+    'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone',
+    'Singapore', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia',
+    'South Africa', 'South Sudan', 'Spain', 'Sri Lanka', 'Sudan',
+    'Suriname', 'Sweden', 'Switzerland', 'Syria', 'Taiwan',
+    'Tajikistan', 'Tanzania', 'Thailand', 'Timor-Leste', 'Togo',
+    'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan',
+    'Tuvalu', 'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom',
+    'United States of America', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City',
+    'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe'
 );
 function travel_packages_custom_post_type()
 {
@@ -92,6 +102,186 @@ function add_travel_package_meta_boxes()
         'normal',
         'high'
     );
+}
+
+// Add meta box for photos
+add_action('add_meta_boxes', 'add_travel_package_photos_meta_box');
+function add_travel_package_photos_meta_box()
+{
+    add_meta_box(
+        'travel_package_photos_meta_box', // Unique ID
+        'Gallery Photos', // Box title
+        'render_travel_package_photos_meta_box', // Callback function
+        'travel-package', // Post type
+        'normal', // Position
+        'high' // Priority
+    );
+}
+
+// Render meta box for photos
+function render_travel_package_photos_meta_box($post)
+{
+    // Retrieve the current photos
+    $photos = get_post_meta($post->ID, 'photos', true);
+
+    // Output the HTML form fields
+    ?>
+
+    <div class="add-photos-container">
+        <label for="travel-package-photos">Add Gallery Photos (Maximum 6):</label>
+        <input type="file" id="travel-package-photos" name="travel-package-photos[]" multiple accept="image/*">
+        <button type="button" id="save-photos-button">Save Photos</button>
+    </div>
+
+
+    <div id="uploaded-photos-container" class="uploaded-photos-container">
+        <?php
+        // Display the uploaded photos
+        if (!empty($photos)) {
+            echo '<div class="uploaded-photos">';
+            foreach ($photos as $photo) {
+                echo '<div class="uploaded-photo"><img src="' . esc_url($photo) . '" alt="Package Photo" style="width: 212.5px; height: 140px; object-fit: cover;"></div>';
+            }
+            echo '</div>';
+        }
+        ?>
+    </div>
+
+    <script>
+        jQuery(document).ready(function($) {
+            $('#save-photos-button').click(function() {
+                    var formData = new FormData();
+                    var files = $('#travel-package-photos')[0].files;
+                    var postID = <?php echo get_the_ID(); ?>;
+
+                    for (var i = 0; i < files.length; i++) {
+                        formData.append('travel-package-photos[]', files[i]);
+                    }
+                    formData.append('post_id', postID);
+
+                    // Send AJAX request to save the photos
+                    $.ajax({
+                        url: '<?php echo rest_url('travel-package-photos/v1/save'); ?>',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        beforeSend: function(xhr) {
+                            xhr.setRequestHeader('X-WP-Nonce', '<?php echo wp_create_nonce('wp_rest'); ?>'); // Update with the correct nonce name
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                // Clear the file input field
+                                $('#travel-package-photos').val('');
+
+                                // Update the uploaded photos container
+                                $('#uploaded-photos-container').html(response.html);
+                            }
+                        }
+                    });
+            });
+        });
+    </script>
+<?php
+}
+
+function upload_photo($photo_tmp, $photo_name)
+{
+    $photo_name = sanitize_file_name($photo_name); // Sanitize the photo name
+    $photo_extension = pathinfo($photo_name, PATHINFO_EXTENSION); // Get the photo extension
+    $upload_dir = wp_upload_dir(); // Retrieve the WordPress uploads directory information
+    $target_dir = $upload_dir['path']; // Set the target directory for the uploaded photo
+    $target_file = $target_dir . '/' . $photo_name; // Set the target file path
+    $photo_url = $upload_dir['url'] . '/' . $photo_name; // Set the URL of the uploaded photo
+
+    // Check if a file with the same name already exists
+    $counter = 1;
+    while (file_exists($target_file)) {
+        $new_photo_name = pathinfo($photo_name, PATHINFO_FILENAME) . '-' . $counter . '.' . $photo_extension; // Append a counter to the file name
+        $target_file = $target_dir . '/' . $new_photo_name;
+        $photo_url = $upload_dir['url'] . '/' . $new_photo_name;
+        $counter++;
+    }
+
+    // Move the uploaded photo to the target directory
+    if (move_uploaded_file($photo_tmp, $target_file)) {
+        return $photo_url; // Return the URL of the uploaded photo
+    } else {
+        return false; // Return false if the upload process failed
+    }
+}
+
+
+// REST API endpoint to save photos
+add_action('rest_api_init', 'register_save_travel_package_photos_endpoint');
+function register_save_travel_package_photos_endpoint()
+{
+    register_rest_route('travel-package-photos/v1', '/save', array(
+        'methods'  => 'POST',
+        'callback' => 'save_travel_package_photos',
+        'permission_callback' => function () {
+            return current_user_can('edit_posts');
+        },
+    ));
+}
+
+// Callback function to handle photo saving
+function save_travel_package_photos($request)
+{
+    $post_id = isset($request['post_id']) ? intval($request['post_id']) : 0;
+    error_log('-------- save_travel_package_photos: ');
+    // Check if photos were uploaded
+    if (isset($_FILES['travel-package-photos'])) {
+        error_log('-------- isset $_FILES TRUE: ');
+        $photos = $_FILES['travel-package-photos'];
+
+        // Array to store uploaded photo URLs
+        $uploaded_photos = array();
+
+        // Handle each uploaded photo
+        foreach ($photos['name'] as $key => $photo_name) {
+            if ($photos['error'][$key] === UPLOAD_ERR_OK) {
+                // Check if the maximum number of photos has been reached
+                if (count($uploaded_photos) >= 6) {
+                    continue; // Exit the loop if the limit is reached
+                }
+                $photo_tmp = $photos['tmp_name'][$key];
+                $photo_url = upload_photo($photo_tmp, $photo_name); // Implement the photo upload logic here
+
+                if ($photo_url) {
+                    $uploaded_photos[] = $photo_url;
+                }
+            }
+        }
+
+        // Update the meta field with the uploaded photos
+        update_post_meta($post_id, 'photos', $uploaded_photos);
+        error_log('-------- updated post meta: post id::'.$post_id);
+
+        return rest_ensure_response(array(
+            'success' => true,
+            'html' => get_uploaded_photos_html($uploaded_photos)
+        ));
+    }
+
+    return rest_ensure_response(array(
+        'success' => false,
+        'message' => 'No photos uploaded'
+    ));
+}
+
+// Helper function to generate HTML for uploaded photos
+function get_uploaded_photos_html($photos)
+{
+    $html = '<div class="uploaded-photos-container">';
+    $html .= '<div class="uploaded-photos">';
+    foreach ($photos as $photo) {
+        $html .= '<div class="uploaded-photo"><img src="' . esc_url($photo) . '" alt="Package Photo" style="width: 212.5px; height: 140px; object-fit: cover;"></div>';
+    }
+    $html .= '</div>';
+    $html .= '</div>';
+
+    return $html;
 }
 
 function render_travel_package_details_meta_box($post)
@@ -149,35 +339,31 @@ function render_travel_package_details_meta_box($post)
     <hr class="clear-line">
 
     <div>
-        <label for="cost"><Strong>Costs:</Strong></label>
+        <label for="add-cost"><Strong>Costs:</Strong></label>
     </div>
 
 
-    <div style="padding-left:40px; padding-bottom:10px;">
+    <div style="padding-left:40px; padding-bottom:20px;">
         <div style="display: flex; flex-wrap: wrap;">
-            <div style="flex-basis: 50%;">
+            <div style="flex-basis: 20%;">
                 <label for="cost2pax">
                     <?php _e('2 Pax:', 'travel-packages'); ?>
                 </label>
                 <input type="text" id="cost2pax" name="cost2pax" value="<?php echo esc_attr($cost2pax); ?>">
             </div>
-            <div style="flex-basis: 50%;" class="cost">
+            <div style="flex-basis: 20%;" class="cost">
                 <label for="cost4pax">
                     <?php _e('4 Pax:', 'travel-packages'); ?>
                 </label>
                 <input type="text" id="cost4pax" name="cost4pax" value="<?php echo esc_attr($cost4pax); ?>">
             </div>
-        </div>
-    </div>
-    <div style="padding-left:40px; padding-bottom:10px;">
-        <div style="display: flex; flex-wrap: wrap;">
-            <div style="flex-basis: 50%;" class="cost">
+            <div style="flex-basis: 20%;" class="cost">
                 <label for="cost6pax">
                     <?php _e('6 Pax:', 'travel-packages'); ?>
                 </label>
                 <input type="text" id="cost6pax" name="cost6pax" value="<?php echo esc_attr($cost6pax); ?>">
             </div>
-            <div style="flex-basis: 50%;" class="cost">
+            <div style="flex-basis: 20%;" class="cost">
                 <label for="cost8pax">
                     <?php _e('8 Pax:', 'travel-packages'); ?>
                 </label>
@@ -194,7 +380,7 @@ function render_travel_package_details_meta_box($post)
 
     <div style="padding-left:40px; padding-right:40px; padding-bottom:10px;">
         <textarea id="map_url" name="map_url" class="custom-textarea"
-            style="display: inline-block; width: 100%; height: 50px;"><?php echo esc_textarea($map_url); ?></textarea>
+            style="display: inline-block; width: 100%; height: 100px;"><?php echo esc_textarea($map_url); ?></textarea>
     </div>
 
     <hr class="clear-line">
@@ -245,23 +431,6 @@ function render_travel_package_details_meta_box($post)
     </div>
 
     <hr class="clear-line">
-    <!-- // TODO - START -->
-    <div>
-        <label for="photos">
-            <?php _e('Photos:', 'travel-packages'); ?>
-        </label>
-        <input type="file" id="photos" name="photos[]" multiple>
-        <?php
-        if ($photos) {
-            echo '<ul>';
-            foreach ($photos as $photo) {
-                echo '<li><img src="' . esc_url($photo) . '" alt="Package Photo" style="max-width: 200px; max-height: 200px;"></li>';
-            }
-            echo '</ul>';
-        }
-        ?>
-    </div>
-    <!-- // TODO - END -->
     <?php
 }
 
@@ -324,36 +493,6 @@ function save_travel_package_details($post_id)
     if (isset($_POST['notes'])) {
         update_post_meta($post_id, 'notes', wp_kses_post($_POST['notes']));
     }
-    // TODO - START
-    if (isset($_FILES['photos'])) {
-        var_dump('---------- photos available in files');
-        $photo_urls = array();
-
-        $photo_files = $_FILES['photos'];
-
-        foreach ($photo_files['name'] as $key => $photo_name) {
-            $photo_tmp = $photo_files['tmp_name'][$key];
-            $photo_type = $photo_files['type'][$key];
-            $upload_dir = wp_upload_dir();
-            $upload_path = $upload_dir['path'];
-            $upload_url = $upload_dir['url'];
-
-            $photo_path = $upload_path . '/' . $photo_name;
-            $photo_url = $upload_url . '/' . $photo_name;
-
-            move_uploaded_file($photo_tmp, $photo_path);
-
-            $photo_urls[] = $photo_url;
-        }
-        var_dump($photo_urls);
-        exit;
-
-        update_post_meta($post_id, 'photos', $photo_urls);
-    } else {
-        var_dump('---------- photos not available in files');
-        // exit;
-    }
-    // TODO - END
 }
 add_action('save_post_travel-package', 'save_travel_package_details');
 
@@ -363,6 +502,7 @@ function enqueue_travel_package_styles()
     wp_enqueue_style('travel-package-styles', plugin_dir_url(__FILE__) . 'css/travel-package-styles.css');
 }
 add_action('wp_enqueue_scripts', 'enqueue_travel_package_styles');
+add_action('admin_enqueue_scripts', 'enqueue_travel_package_styles');
 
 function enqueue_custom_script() {
     // Enqueue the custom JavaScript file
@@ -577,3 +717,64 @@ function create_travel_detail_page()
 }
 // This hook will execute when the plugin will activate
 register_activation_hook(__FILE__, 'create_travel_detail_page');
+
+
+// Travel destinations metabox
+
+// Add meta box for travel destinations
+add_action('add_meta_boxes', 'add_travel_destinations_meta_box');
+function add_travel_destinations_meta_box()
+{
+    add_meta_box(
+        'travel_destinations_meta_box', // Unique ID
+        'Travel Destinations', // Box title
+        'render_travel_destinations_meta_box', // Callback function
+        'travel-package', // Post type
+        'normal', // Position
+        'high' // Priority
+    );
+}
+
+// Render meta box for travel destinations
+function render_travel_destinations_meta_box($post)
+{
+    // Retrieve the current travel destinations
+    $travel_destinations = get_post_meta($post->ID, 'travel_destinations', true);
+
+    // Output the HTML form fields
+    ?>
+    <div>
+        <label for="travel-destinations">Travel Destinations:</label>
+        <div id="travel-destinations-container">
+            <?php
+            if (!empty($travel_destinations)) {
+                foreach ($travel_destinations as $destination) {
+                    echo '<input type="text" class="travel-destination" name="travel_destinations[]" value="' . esc_attr($destination) . '">';
+                }
+            }
+            ?>
+        </div>
+        <button type="button" id="add-destination-button">Add Destination</button>
+    </div>
+    <?php
+}
+
+// Save meta box data
+add_action('save_post', 'save_travel_destinations_meta_box');
+function save_travel_destinations_meta_box($post_id)
+{
+    if (isset($_POST['travel_destinations'])) {
+        $travel_destinations = $_POST['travel_destinations'];
+        update_post_meta($post_id, 'travel_destinations', $travel_destinations);
+    }
+}
+
+// Enqueue scripts for meta box
+add_action('admin_enqueue_scripts', 'enqueue_travel_destinations_meta_box_scripts');
+function enqueue_travel_destinations_meta_box_scripts($hook)
+{
+    // Enqueue scripts only on the 'post' edit screen
+    if ($hook === 'post.php' || $hook === 'post-new.php') {
+        wp_enqueue_script('travel-destinations-meta-box', plugin_dir_url(__FILE__) . 'js/travel-destinations-meta-box.js', array('jquery'), '1.0', true);
+    }
+}

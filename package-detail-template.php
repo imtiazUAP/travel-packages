@@ -5,6 +5,13 @@
  */
 
 get_header();
+
+function enqueue_lightbox_scripts() {
+    wp_enqueue_style('lightbox-css', 'https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css', array(), '2.11.3', 'all');
+    wp_enqueue_script('lightbox-js', 'https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js', array('jquery'), '2.11.3', true);
+}
+add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
+
 ?>
 
 <div id="primary" class="content-area">
@@ -40,7 +47,8 @@ get_header();
                 $cancellation_policy = get_post_meta($package->ID, 'cancellation_policy', true);
                 $notes = get_post_meta($package->ID, 'notes', true);
                 // TODO - START
-                $photo_album = get_post_meta($package->ID, 'photo_album', true);
+                $photo_album = get_post_meta($package->ID, 'photos', true);
+                $travel_destinations = get_post_meta($package->ID, 'travel_destinations', true);
                 // TODO - END
                 ?>
                 <div class="photo-detail-flexbox">
@@ -48,7 +56,7 @@ get_header();
                         <?php
                             if ($package_image) {
                                 echo '<div class="package-detail-thumbnail">';
-                                echo '<img src="' . esc_url($package_image) . '" alt="' . get_the_title($package) . '" />';
+                                echo '<a href="' . esc_url($package_image) . '" data-lightbox="photo-album" data-title="Package Photo"><img src="' . esc_url($package_image) . '" alt=" Package Photo" /></a>';
                                 echo '</div>';
                             }
                         ?>
@@ -63,6 +71,22 @@ get_header();
                                     if (!empty($country)) {
                                         echo '<i class="fas fa-map-marker-alt"></i> <span>'. esc_html(ucfirst($country)) . '</span>';
                                     }
+                                ?>
+                            </div>
+                        </div>
+                        <div class="travel-destinations-detail">
+                            <div>
+                                <label><strong>Travel Destinations:</strong></label>
+                            </div>
+                            <div class="travel-destinations">
+                                <?php
+                                foreach ($travel_destinations as $travel_destination) {
+                                    if (!empty($travel_destination)) {
+                                        echo '<div class="travel-destination">';
+                                        echo '<i class="fas fa-map-marker-alt"></i> <span>' . esc_html(ucfirst($travel_destination)) . '</span>';
+                                        echo '</div>';
+                                    }
+                                }
                                 ?>
                             </div>
                         </div>
@@ -100,6 +124,17 @@ get_header();
                             </div>
                         </div>
                     </div>
+                </div>
+                <div>
+                    <?php
+                        if (!empty($photo_album)) {
+                            echo '<div class="photo-album">';
+                            foreach ($photo_album as $index => $photo) {
+                                echo '<a href="' . esc_url($photo) . '" data-lightbox="photo-album" data-title="Photo ' . ($index + 1) . '"><img src="' . esc_url($photo) . '" alt="Photo ' . ($index + 1) . '" /></a>';
+                            }
+                            echo '</div>';
+                        }
+                    ?>
                 </div>
                 <div class="travel-plan">
                     <h3>Our Travel Plan</h3>
@@ -198,16 +233,7 @@ get_header();
                     </div>
                 </div>
 
-                <?php
-                // TODO - START
-                if (!empty($photo_album)) {
-                    echo '<div class="photo-album">';
-                    foreach ($photo_album as $photo) {
-                        echo '<div class="photo"><img src="' . esc_url($photo) . '" alt="Photo" /></div>';
-                    }
-                    echo '</div>';
-                }
-                // TODO - END
+            <?php
             } else {
                 echo 'Package not found.';
             }
