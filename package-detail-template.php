@@ -49,6 +49,7 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                 // TODO - START
                 $photo_album = get_post_meta($package->ID, 'photos', true);
                 $travel_destinations = get_post_meta($package->ID, 'travel_destinations', true);
+                $activities = get_post_meta($package->ID, 'activities', true);
                 // TODO - END
                 ?>
                 <div class="photo-detail-flexbox">
@@ -62,16 +63,30 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                         ?>
                     </div>
                     <div class="cost-duration-country-flex">
-                        <div class="country-detail">
-                            <div>
-                                <label><Strong>Country:</Strong></label>
+                        <div class="country-duration-flex">
+                            <div class="country-detail">
+                                <div>
+                                    <label><Strong>Country:</Strong></label>
+                                </div>
+                                <div class="country">
+                                    <?php
+                                        if (!empty($country)) {
+                                            echo '<i class="fas fa-map-marker-alt"></i> <span>'. esc_html(ucfirst($country)) . '</span>';
+                                        }
+                                    ?>
+                                </div>
                             </div>
-                            <div class="country">
-                                <?php
-                                    if (!empty($country)) {
-                                        echo '<i class="fas fa-map-marker-alt"></i> <span>'. esc_html(ucfirst($country)) . '</span>';
-                                    }
-                                ?>
+                            <div class="duration-detail">
+                                <div>
+                                    <label><Strong>Duration Detail:</Strong></label>
+                                </div>
+                                <div class="duration">
+                                    <?php
+                                        if (!empty($duration_days) && !empty($duration_nights)) {
+                                            echo '<i class="fa-regular fa-clock"></i> <span>'. esc_html($duration_days) . ' Days ' . esc_html($duration_nights) . ' Nights</span>';
+                                        }
+                                    ?>
+                                </div>
                             </div>
                         </div>
                         <div class="travel-destinations-detail">
@@ -90,18 +105,22 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                                 ?>
                             </div>
                         </div>
-                        <div class="duration-detail">
+                        <div class="travel-activities-detail">
                             <div>
-                                <label><Strong>Duration Detail:</Strong></label>
+                                <label><strong>Travel Activities:</strong></label>
                             </div>
-                            <div class="duration">
+                            <div class="travel-activities">
                                 <?php
-                                    if (!empty($duration_days) && !empty($duration_nights)) {
-                                        echo '<i class="fa-regular fa-clock"></i> <span>'. esc_html($duration_days) . ' Days ' . esc_html($duration_nights) . ' Nights</span>';
+                                foreach ($activities as $activity) {
+                                    if (!empty($activity)) {
+                                        echo '<div class="travel-activity">';
+                                        echo '<i class="fa-solid fa-check"></i> <span>' . esc_html(ucfirst($activity)) . '</span>';
+                                        echo '</div>';
                                     }
+                                }
                                 ?>
                             </div>
-                        </div> 
+                        </div>
                         <div class="cost-detail">
                             <div>
                                 <label><Strong>Cost Detail:</Strong></label>

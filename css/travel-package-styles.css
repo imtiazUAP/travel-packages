@@ -211,7 +211,8 @@
   .country-detail,
   .duration-detail,
   .cost-detail,
-  .travel-destinations-detail {
+  .travel-destinations-detail,
+  .travel-activities-detail {
     margin-left: 30px;
     padding-bottom: 20px;
   }
@@ -219,9 +220,39 @@
   .cost,
   .country,
   .duration,
-  .travel-destinations {
+  .travel-destinations,
+  .travel-activities {
     margin-left: 30px;
   }
+
+  .country-duration-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .country-detail,
+  .duration-detail {
+    flex-basis: 50%;
+  }
+  
+  .country-detail label,
+  .duration-detail label {
+    display: block;
+    font-weight: bold;
+  }
+  
+  .country-detail .country,
+  .duration-detail .duration {
+    display: flex;
+    align-items: center;
+  }
+  
+  .country-detail .country i,
+  .duration-detail .duration i {
+    margin-right: 5px;
+  }
+  
 
   .travel-plan {
     display: flex;
@@ -329,12 +360,14 @@
 }
 
 /* Travel Destinations */
-.travel-destinations {
+.travel-destinations,
+.travel-activities {
   display: flex;
   flex-wrap: wrap;
 }
 
-.travel-destination {
+.travel-destination,
+.travel-activity {
   padding-left: 10px;
   margin-bottom: 10px;
   white-space: nowrap;

@@ -778,3 +778,102 @@ function enqueue_travel_destinations_meta_box_scripts($hook)
         wp_enqueue_script('travel-destinations-meta-box', plugin_dir_url(__FILE__) . 'js/travel-destinations-meta-box.js', array('jquery'), '1.0', true);
     }
 }
+
+add_action('admin_enqueue_scripts', 'enqueue_travel_package_scripts');
+function enqueue_travel_package_scripts($hook)
+{
+    if ($hook === 'post.php' || $hook === 'post-new.php') {
+        wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js', array('jquery'), '4.0.13', true);
+        wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css', array(), '4.0.13');
+        wp_enqueue_script('travel-activities-scripts', plugin_dir_url(__FILE__) . 'js/travel-activities-scripts.js', array('jquery', 'select2'), '1.0', true);
+    }
+}
+
+
+// Add meta box for activities
+add_action('add_meta_boxes', 'add_travel_package_activities_meta_box');
+function add_travel_package_activities_meta_box()
+{
+    add_meta_box(
+        'travel_package_activities_meta_box', // Unique ID
+        'Activities', // Box title
+        'render_travel_package_activities_meta_box', // Callback function
+        'travel-package', // Post type
+        'normal', // Position
+        'high' // Priority
+    );
+}
+
+// Render meta box for activities
+function render_travel_package_activities_meta_box($post)
+{
+    // Define the set of activities
+    $activity_set = array(
+        // Line 1
+        'Sightseeing', 'Hiking', 'Beach Relaxation', 'Cultural Exploration', 'City Tour',
+        'Adventure Sports', 'Wildlife Safari', 'Camping', 'Food Tasting', 'Boat Cruise',
+        'Photography', 'Shopping', 'Spa and Wellness', 'Historical Tours', 'Water Activities',
+        'Nature Walks', 'Museum Visits', 'Wine Tasting', 'Local Festivals', 'Nightlife',
+        // Line 2
+        'Road Trip', 'Trekking', 'Scuba Diving', 'Snorkeling', 'Mountain Climbing',
+        'Cycling', 'Yoga Retreat', 'Food Market Tour', 'Sunset Watching', 'River Rafting',
+        'Bird Watching', 'Art Galleries', 'Cooking Classes', 'Volunteering', 'Parasailing',
+        'Archaeological Sites', 'Sunbathing', 'Train Rides', 'Cruise Excursions', 'Helicopter Tours',
+        // Line 3
+        'Ziplining', 'Surfing', 'Kayaking', 'Golfing', 'Spelunking',
+        'Skiing', 'Windsurfing', 'Desert Safari', 'Motorbike Tours', 'Skydiving',
+        'Dolphin Watching', 'Local Cuisine Experience', 'Monument Visits', 'Hot Air Ballooning', 'Art and Craft Workshops',
+        'Gardens and Parks', 'Snack Tasting', 'Farm Visits', 'Waterfall Exploration', 'Helicopter Sightseeing',
+        // Line 4
+        'Motorcycle Tours', 'Cultural Festivals', 'Fishing', 'Canyoning', 'Sunrise Trek',
+        'Horseback Riding', 'Caving', 'Honeymoon Specials', 'Zip-lining', 'Glacier Hiking',
+        'Cultural Shows', 'Beer Tasting', 'Tea Plantation Tours', 'River Cruises', 'Marine Life Encounters',
+        'Cooking Experiences', 'Bungee Jumping', 'Desert Camping', 'Rock Climbing', 'Photography Tours',
+        // Line 5
+        'Boat Tours', 'Sunrise Watching', 'Surf Lessons', 'Elephant Sanctuaries', 'Motorbike Rentals',
+        'Paragliding', 'Yoga and Meditation Retreats', 'Street Food Tours', 'Ice Climbing', 'Opera and Theater Shows',
+        'Nature Reserves', 'Beer Breweries', 'Art Museums', 'Hiking Expeditions', 'Winery Visits',
+        'Local Market Visits', 'Sailing Trips', 'Cultural Workshops', 'Snowboarding', 'Wildlife Encounters'
+        // Add more activities here...
+    );
+    
+
+    // Retrieve the current activities
+    $activities = get_post_meta($post->ID, 'activities', true);
+
+    // Output the HTML form fields
+    ?>
+    <div>
+        <label for="travel-package-activities">Activities:</label>
+        <select name="travel-package-activities[]" multiple class="widefat travel-package-activities">
+            <?php
+            foreach ($activity_set as $activity) {
+                $selected = in_array($activity, $activities) ? 'selected' : '';
+                echo '<option value="' . esc_attr($activity) . '" ' . $selected . '>' . esc_html($activity) . '</option>';
+            }
+            ?>
+        </select>
+    </div>
+    <?php
+}
+
+
+
+// Save meta box data
+add_action('save_post', 'save_travel_package_activities_meta_box');
+function save_travel_package_activities_meta_box($post_id)
+{
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (!isset($_POST['travel-package-activities'])) {
+        return;
+    }
+
+    $activities = $_POST['travel-package-activities'];
+
+    // Sanitize and save activities
+    $sanitized_activities = array_map('sanitize_text_field', $activities);
+    update_post_meta($post_id, 'activities', $sanitized_activities);
+}
