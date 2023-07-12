@@ -50,7 +50,12 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                 $photo_album = get_post_meta($package->ID, 'photos', true);
                 $travel_destinations = get_post_meta($package->ID, 'travel_destinations', true);
                 $activities = get_post_meta($package->ID, 'activities', true);
-                // TODO - END
+                $packageActivities = array();
+                if ( is_array($activities) && count($activities) > 0) {
+                    global $activity_set;
+                    $packageActivities = array_intersect($activity_set, $activities);
+                }
+
                 ?>
                 <div class="photo-detail-flexbox">
                     <div class="photo-flex">
@@ -71,19 +76,19 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                                 <div class="country">
                                     <?php
                                         if (!empty($country)) {
-                                            echo '<i class="fas fa-map-marker-alt"></i> <span>'. esc_html(ucfirst($country)) . '</span>';
+                                            echo '<i class="fa fa-flag"></i></i> <span>'. esc_html(ucfirst($country)) . '</span>';
                                         }
                                     ?>
                                 </div>
                             </div>
                             <div class="duration-detail">
                                 <div>
-                                    <label><Strong>Duration Detail:</Strong></label>
+                                    <label><Strong>Duration Detail: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</Strong></label>
                                 </div>
                                 <div class="duration">
                                     <?php
                                         if (!empty($duration_days) && !empty($duration_nights)) {
-                                            echo '<i class="fa-regular fa-clock"></i> <span>'. esc_html($duration_days) . ' Days ' . esc_html($duration_nights) . ' Nights</span>';
+                                            echo '<i class="fa fa-clock"></i> <span>'. esc_html($duration_days) . ' Days ' . esc_html($duration_nights) . ' Nights</span>';
                                         }
                                     ?>
                                 </div>
@@ -91,35 +96,38 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                         </div>
                         <div class="travel-destinations-detail">
                             <div>
-                                <label><strong>Travel Destinations:</strong></label>
+                                <label><strong>Destinations:</strong></label>
                             </div>
-                            <div class="travel-destinations">
-                                <?php
-                                foreach ($travel_destinations as $travel_destination) {
-                                    if (!empty($travel_destination)) {
-                                        echo '<div class="travel-destination">';
-                                        echo '<i class="fas fa-map-marker-alt"></i> <span>' . esc_html(ucfirst($travel_destination)) . '</span>';
-                                        echo '</div>';
+                            <?php if ( is_array($travel_destinations) && count($travel_destinations) > 0) { ?>
+                                <div class="travel-destinations">
+                                    <?php
+                                    foreach ($travel_destinations as $travel_destination) {
+                                        if (!empty($travel_destination)) {
+                                            echo '<div class="travel-destination">';
+                                            echo '<i class="fa fa-map-location-dot"></i> <span>' . esc_html(ucfirst($travel_destination)) . '</span>';
+                                            echo '</div>';
+                                        }
                                     }
-                                }
-                                ?>
-                            </div>
+                                    ?>
+                                </div>
+                            <?php } ?>
                         </div>
                         <div class="travel-activities-detail">
                             <div>
-                                <label><strong>Travel Activities:</strong></label>
+                                <label><strong>Activities:</strong></label>
                             </div>
-                            <div class="travel-activities">
-                                <?php
-                                foreach ($activities as $activity) {
-                                    if (!empty($activity)) {
-                                        echo '<div class="travel-activity">';
-                                        echo '<i class="fa-solid fa-check"></i> <span>' . esc_html(ucfirst($activity)) . '</span>';
-                                        echo '</div>';
-                                    }
-                                }
-                                ?>
-                            </div>
+                            <?php
+                            if (count($packageActivities) > 0) { ?>
+                                <div class="travel-activities">
+                                    <?php
+                                        foreach ($packageActivities as $icon => $activity) {
+                                            echo '<div class="travel-activity">';
+                                            echo '<i class="'.$icon.'"></i> <span>' . esc_html(ucfirst($activity)) . '</span>';
+                                            echo '</div>';
+                                        }
+                                    ?>
+                                </div>
+                            <?php } ?>
                         </div>
                         <div class="cost-detail">
                             <div>
@@ -128,16 +136,16 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                             <div class="cost">
                                 <?php
                                     if (!empty($cost2pax)) {
-                                        echo '<i class="fas fa-user"></i><strong>x2</strong><span> person group: ' . esc_html($cost2pax) . ' per person</span><br>';
+                                        echo '<i class="fa fa-user"></i>x<strong>2</strong><span> person group: ' . esc_html($cost2pax) . ' p.person</span><br>';
                                     }
                                     if (!empty($cost4pax)) {
-                                        echo '<i class="fas fa-user"></i><strong>x4</strong><span> person group: ' . esc_html($cost4pax) . ' per person</span><br>';
+                                        echo '<i class="fa fa-user"></i>x<strong>4</strong><span> person group: ' . esc_html($cost4pax) . ' p.person</span><br>';
                                     }
                                     if (!empty($cost6pax)) {
-                                        echo '<i class="fas fa-user"></i><strong>x6</strong><span> person group: ' . esc_html($cost6pax) . ' per person</span><br>';
+                                        echo '<i class="fa fa-user"></i>x<strong>6</strong><span> person group: ' . esc_html($cost6pax) . ' p.person</span><br>';
                                     }
                                     if (!empty($cost8pax)) {
-                                        echo '<i class="fas fa-user"></i><strong>x8</strong><span> person group: ' . esc_html($cost8pax) . ' per person</span><br>';
+                                        echo '<i class="fa fa-user"></i>x<strong>8</strong><span> person group: ' . esc_html($cost8pax) . ' p.person</span><br>';
                                     }
                                 ?>
                             </div>
@@ -156,7 +164,7 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                     ?>
                 </div>
                 <div class="travel-plan">
-                    <h3>Our Travel Plan</h3>
+                    <h3>Itinerary</h3>
                 </div>
                 <div class="package-detail">
                     <?php echo apply_filters('the_content', $package->post_content);?>
@@ -187,15 +195,25 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                     <?php
                     }
                 ?></div>
-
-                <div class="tabs">
-                    <div class="tab">
-                        <button class="tablinks" onclick="openTab(event, 'TravelMap')" id="defaultOpen">Travel Map</button>
-                        <button class="tablinks" onclick="openTab(event, 'Highlights')">Highlights</button>
-                        <button class="tablinks" onclick="openTab(event, 'GeneralCondition')">General Condition</button>
-                        <button class="tablinks" onclick="openTab(event, 'CancellationPolicy')">Cancellation Policy</button>
-                        <button class="tablinks" onclick="openTab(event, 'Notes')">Special Notes</button>
-                    </div>
+                <?php if (!empty($map_url) || !empty($highlights) || !empty($general_conditions) || !empty($cancellation_policy) || !empty($notes)) { ?>
+                    <div class="tabs">
+                        <div class="tab">
+                            <?php if (!empty($map_url)) { ?>
+                            <button class="tablinks" onclick="openTab(event, 'TravelMap')" <?php if (empty($defaultOpen)) { echo 'id="defaultOpen"'; $defaultOpen = true; } ?>>Travel Map</button>
+                            <?php }
+                            if (!empty($highlights)) { ?>
+                            <button class="tablinks" onclick="openTab(event, 'Highlights')" <?php if (empty($defaultOpen)) { echo 'id="defaultOpen"'; $defaultOpen = true; } ?>>Highlights</button>
+                            <?php }
+                            if (!empty($general_conditions)) { ?>
+                            <button class="tablinks" onclick="openTab(event, 'GeneralCondition')" <?php if (empty($defaultOpen)) { echo 'id="defaultOpen"'; $defaultOpen = true; } ?>>General Condition</button>
+                            <?php }
+                            if (!empty($cancellation_policy)) { ?>
+                            <button class="tablinks" onclick="openTab(event, 'CancellationPolicy')" <?php if (empty($defaultOpen)) { echo 'id="defaultOpen"'; $defaultOpen = true; } ?>>Cancellation Policy</button>
+                            <?php }
+                            if (!empty($notes)) { ?>
+                            <button class="tablinks" onclick="openTab(event, 'Notes')" <?php if (empty($defaultOpen)) { echo 'id="defaultOpen"'; $defaultOpen = true; } ?>>Special Notes</button>
+                            <?php } ?>
+                        </div>
 
                     <div id="TravelMap" class="tabcontent">
                         <div class="map-view">
@@ -251,6 +269,7 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                     ?>
                     </div>
                 </div>
+                <?php } ?>
 
             <?php
             } else {

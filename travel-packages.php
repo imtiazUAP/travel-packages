@@ -53,6 +53,116 @@ $countries = array(
     'United States of America', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City',
     'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe'
 );
+
+global $activity_set;
+$activity_set = array(
+    // Line 1
+    'fa fa-binoculars' => 'Sightseeing',
+    'fa fa-hiking' => 'Hiking',
+    'fa fa-umbrella-beach' => 'Beach Relaxation',
+    'fa fa-landmark' => 'Cultural Exploration',
+    'fa fa-city' => 'City Tour',
+    'fa fa-dumbbell' => 'Adventure Sports',
+    'fa fa-paw' => 'Wildlife Safari',
+    'fa fa-campground' => 'Camping',
+    'fa fa-utensils' => 'Food Tasting',
+    'fa fa-ship' => 'Boat Cruise',
+    'fa fa-camera' => 'Photography',
+    'fa fa-shopping-bag' => 'Shopping',
+    'fa fa-spa' => 'Spa and Wellness',
+    'fa fa-monument' => 'Historical Tours',
+    'fa fa-swimming-pool' => 'Water Activities',
+    'fa fa-tree' => 'Nature Walks',
+    'fa fa-museum' => 'Museum Visits',
+    'fa fa-wine-glass-alt' => 'Wine Tasting',
+    'fa fa-glass-cheers' => 'Local Festivals',
+    'fa fa-cocktail' => 'Nightlife',
+    // Line 2
+    'fa fa-road' => 'Road Trip',
+    'fa fa-hiking' => 'Trekking',
+    'fa fa-water' => 'Scuba Diving',
+    'fa fa-snorkel-mask' => 'Snorkeling',
+    'fa fa-mountain' => 'Mountain Climbing',
+    'fa fa-bicycle' => 'Cycling',
+    'fa fa-yoga' => 'Yoga Retreat',
+    'fa fa-shopping-basket' => 'Food Market Tour',
+    'fa fa-sun' => 'Sunset Watching',
+    'fa fa-rafting' => 'River Rafting',
+    'fa fa-binoculars' => 'Bird Watching',
+    'fa fa-paint-brush' => 'Art Galleries',
+    'fa fa-utensils' => 'Cooking Classes',
+    'fa fa-hands-helping' => 'Volunteering',
+    'fa fa-parachute-box' => 'Parasailing',
+    'fa fa-archway' => 'Archaeological Sites',
+    'fa fa-sun' => 'Sunbathing',
+    'fa fa-train' => 'Train Rides',
+    'fa fa-ship' => 'Cruise Excursions',
+    'fa fa-helicopter' => 'Helicopter Tours',
+    // Line 3
+    'fa fa-exchange-alt' => 'Ziplining',
+    'fa fa-surfing' => 'Surfing',
+    'fa fa-kayak' => 'Kayaking',
+    'fa fa-golf-ball' => 'Golfing',
+    'fa fa-cave' => 'Spelunking',
+    'fa fa-skiing' => 'Skiing',
+    'fa fa-wind' => 'Windsurfing',
+    'fa fa-caravan' => 'Desert Safari',
+    'fa fa-motorcycle' => 'Motorbike Tours',
+    'fa fa-parachute-box' => 'Skydiving',
+    'fa fa-dolphin' => 'Dolphin Watching',
+    'fa fa-utensils' => 'Local Cuisine Experience',
+    'fa fa-monument' => 'Monument Visits',
+    'fa fa-hot-air-balloon' => 'Hot Air Ballooning',
+    'fa fa-palette' => 'Art and Craft Workshops',
+    'fa fa-tree' => 'Gardens and Parks',
+    'fa fa-cookie' => 'Snack Tasting',
+    'fa fa-farm' => 'Farm Visits',
+    'fa fa-waterfall' => 'Waterfall Exploration',
+    'fa fa-helicopter' => 'Helicopter Sightseeing',
+    // Line 4
+    'fa fa-motorcycle' => 'Motorcycle Tours',
+    'fa fa-hat-cowboy' => 'Cultural Festivals',
+    'fa fa-fish' => 'Fishing',
+    'fa fa-canyon' => 'Canyoning',
+    'fa fa-hiking' => 'Sunrise Trek',
+    'fa fa-horse' => 'Horseback Riding',
+    'fa fa-cave' => 'Caving',
+    'fa fa-heart' => 'Honeymoon Specials',
+    'fa fa-exchange-alt' => 'Zip-lining',
+    'fa fa-mountain' => 'Glacier Hiking',
+    'fa fa-theater-masks' => 'Cultural Shows',
+    'fa fa-beer' => 'Beer Tasting',
+    'fa fa-tea' => 'Tea Plantation Tours',
+    'fa fa-ship' => 'River Cruises',
+    'fa fa-fish' => 'Marine Life Encounters',
+    'fa fa-utensils' => 'Cooking Experiences',
+    'fa fa-bolt' => 'Bungee Jumping',
+    'fa fa-campground' => 'Desert Camping',
+    'fa fa-mountain' => 'Rock Climbing',
+    'fa fa-camera' => 'Photography Tours',
+    // Line 5
+    'fa fa-ship' => 'Boat Tours',
+    'fa fa-sun' => 'Sunrise Watching',
+    'fa fa-surfing' => 'Surf Lessons',
+    'fa fa-elephant' => 'Elephant Sanctuaries',
+    'fa fa-motorcycle' => 'Motorbike Rentals',
+    'fa fa-paragliding' => 'Paragliding',
+    'fa fa-yoga' => 'Yoga and Meditation Retreats',
+    'fa fa-utensils' => 'Street Food Tours',
+    'fa fa-mountain' => 'Ice Climbing',
+    'fa fa-theater-masks' => 'Opera and Theater Shows',
+    'fa fa-tree' => 'Nature Reserves',
+    'fa fa-beer' => 'Beer Breweries',
+    'fa fa-palette' => 'Art Museums',
+    'fa fa-hiking' => 'Hiking Expeditions',
+    'fa fa-wine-glass' => 'Winery Visits',
+    'fa fa-shopping-basket' => 'Local Market Visits',
+    'fa fa-ship' => 'Sailing Trips',
+    'fa fa-hands-helping' => 'Cultural Workshops',
+    'fa fa-snowboarding' => 'Snowboarding',
+    'fa fa-paw' => 'Wildlife Encounters'
+    // Add more activities here...
+);
 function travel_packages_custom_post_type()
 {
     $labels = array(
@@ -504,6 +614,12 @@ function enqueue_travel_package_styles()
 add_action('wp_enqueue_scripts', 'enqueue_travel_package_styles');
 add_action('admin_enqueue_scripts', 'enqueue_travel_package_styles');
 
+function enqueue_plugin_styles() {
+    wp_enqueue_style('font-awesome', 'https://use.fontawesome.com/releases/v5.13.0/css/all.css', array(), '5.13.0');
+}
+
+add_action('wp_enqueue_scripts', 'enqueue_plugin_styles');
+
 function enqueue_custom_script() {
     // Enqueue the custom JavaScript file
     wp_enqueue_script('custom-script', plugin_dir_url(__FILE__) . 'js/custom-script.js', array('jquery'), '1.0', true);
@@ -807,37 +923,6 @@ function add_travel_package_activities_meta_box()
 // Render meta box for activities
 function render_travel_package_activities_meta_box($post)
 {
-    // Define the set of activities
-    $activity_set = array(
-        // Line 1
-        'Sightseeing', 'Hiking', 'Beach Relaxation', 'Cultural Exploration', 'City Tour',
-        'Adventure Sports', 'Wildlife Safari', 'Camping', 'Food Tasting', 'Boat Cruise',
-        'Photography', 'Shopping', 'Spa and Wellness', 'Historical Tours', 'Water Activities',
-        'Nature Walks', 'Museum Visits', 'Wine Tasting', 'Local Festivals', 'Nightlife',
-        // Line 2
-        'Road Trip', 'Trekking', 'Scuba Diving', 'Snorkeling', 'Mountain Climbing',
-        'Cycling', 'Yoga Retreat', 'Food Market Tour', 'Sunset Watching', 'River Rafting',
-        'Bird Watching', 'Art Galleries', 'Cooking Classes', 'Volunteering', 'Parasailing',
-        'Archaeological Sites', 'Sunbathing', 'Train Rides', 'Cruise Excursions', 'Helicopter Tours',
-        // Line 3
-        'Ziplining', 'Surfing', 'Kayaking', 'Golfing', 'Spelunking',
-        'Skiing', 'Windsurfing', 'Desert Safari', 'Motorbike Tours', 'Skydiving',
-        'Dolphin Watching', 'Local Cuisine Experience', 'Monument Visits', 'Hot Air Ballooning', 'Art and Craft Workshops',
-        'Gardens and Parks', 'Snack Tasting', 'Farm Visits', 'Waterfall Exploration', 'Helicopter Sightseeing',
-        // Line 4
-        'Motorcycle Tours', 'Cultural Festivals', 'Fishing', 'Canyoning', 'Sunrise Trek',
-        'Horseback Riding', 'Caving', 'Honeymoon Specials', 'Zip-lining', 'Glacier Hiking',
-        'Cultural Shows', 'Beer Tasting', 'Tea Plantation Tours', 'River Cruises', 'Marine Life Encounters',
-        'Cooking Experiences', 'Bungee Jumping', 'Desert Camping', 'Rock Climbing', 'Photography Tours',
-        // Line 5
-        'Boat Tours', 'Sunrise Watching', 'Surf Lessons', 'Elephant Sanctuaries', 'Motorbike Rentals',
-        'Paragliding', 'Yoga and Meditation Retreats', 'Street Food Tours', 'Ice Climbing', 'Opera and Theater Shows',
-        'Nature Reserves', 'Beer Breweries', 'Art Museums', 'Hiking Expeditions', 'Winery Visits',
-        'Local Market Visits', 'Sailing Trips', 'Cultural Workshops', 'Snowboarding', 'Wildlife Encounters'
-        // Add more activities here...
-    );
-    
-
     // Retrieve the current activities
     $activities = get_post_meta($post->ID, 'activities', true);
 
@@ -847,6 +932,7 @@ function render_travel_package_activities_meta_box($post)
         <label for="travel-package-activities">Activities:</label>
         <select name="travel-package-activities[]" multiple class="widefat travel-package-activities">
             <?php
+            global $activity_set;
             foreach ($activity_set as $activity) {
                 $selected = in_array($activity, $activities) ? 'selected' : '';
                 echo '<option value="' . esc_attr($activity) . '" ' . $selected . '>' . esc_html($activity) . '</option>';
