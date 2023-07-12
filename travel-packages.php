@@ -202,32 +202,7 @@ function travel_packages_custom_post_type()
 }
 add_action('init', 'travel_packages_custom_post_type');
 
-function add_travel_package_meta_boxes()
-{
-    add_meta_box(
-        'travel-package-details',
-        __('Travel Package Details', 'travel-packages'),
-        'render_travel_package_details_meta_box',
-        'travel-package',
-        'normal',
-        'high'
-    );
-}
-
 // Add meta box for photos
-add_action('add_meta_boxes', 'add_travel_package_photos_meta_box');
-function add_travel_package_photos_meta_box()
-{
-    add_meta_box(
-        'travel_package_photos_meta_box', // Unique ID
-        'Gallery Photos', // Box title
-        'render_travel_package_photos_meta_box', // Callback function
-        'travel-package', // Post type
-        'normal', // Position
-        'high' // Priority
-    );
-}
-
 // Render meta box for photos
 function render_travel_package_photos_meta_box($post)
 {
@@ -404,18 +379,7 @@ function render_travel_package_details_meta_box($post)
     $cost8pax = get_post_meta($post->ID, 'cost8pax', true);
     $durationDays = get_post_meta($post->ID, 'duration_days', true);
     $durationNights = get_post_meta($post->ID, 'duration_nights', true);
-    $end_date = get_post_meta($post->ID, 'end_date', true);
     $map_url = get_post_meta($post->ID, 'map_url', true);
-    $package_includes = get_post_meta($post->ID, 'package_includes', true);
-    $package_excludes = get_post_meta($post->ID, 'package_excludes', true);
-
-    $highlights = get_post_meta($post->ID, 'highlights', true);
-    $general_conditions = get_post_meta($post->ID, 'general_conditions', true);
-
-    $cancellation_policy = get_post_meta($post->ID, 'cancellation_policy', true);
-    $notes = get_post_meta($post->ID, 'notes', true);
-
-    $photos = get_post_meta($post->ID, 'photos', true);
 
     // Output the HTML form fields for each custom attribute
     ?>
@@ -483,7 +447,6 @@ function render_travel_package_details_meta_box($post)
     </div>
 
     <hr class="clear-line">
-
     <div>
         <label for="cost"><Strong>Map URL:</Strong></label>
     </div>
@@ -492,55 +455,6 @@ function render_travel_package_details_meta_box($post)
         <textarea id="map_url" name="map_url" class="custom-textarea"
             style="display: inline-block; width: 100%; height: 100px;"><?php echo esc_textarea($map_url); ?></textarea>
     </div>
-
-    <hr class="clear-line">
-
-    <div style="display: flex;">
-        <div style="width: 50%; margin-right: 10px;">
-            <label for="package_includes">
-                <?php _e('Package Includes:', 'travel-packages'); ?>
-            </label>
-            <?php wp_editor($package_includes, 'package_includes', array('textarea_name' => 'package_includes')); ?>
-        </div>
-        <div style="width: 50%;">
-            <label for="package_excludes">
-                <?php _e('Package Excludes:', 'travel-packages'); ?>
-            </label>
-            <?php wp_editor($package_excludes, 'package_excludes', array('textarea_name' => 'package_excludes')); ?>
-        </div>
-    </div>
-
-    <div style="display: flex;">
-        <div style="width: 50%; margin-right: 10px;">
-            <label for="highlights">
-                <?php _e('Highlights:', 'travel-packages'); ?>
-            </label>
-            <?php wp_editor($highlights, 'highlights', array('textarea_name' => 'highlights')); ?>
-        </div>
-        <div style="width: 50%;">
-            <label for="general_conditions">
-                <?php _e('General Conditions:', 'travel-packages'); ?>
-            </label>
-            <?php wp_editor($general_conditions, 'general_conditions', array('textarea_name' => 'general_conditions')); ?>
-        </div>
-    </div>
-
-    <div style="display: flex;">
-        <div style="width: 50%; margin-right: 10px;">
-            <label for="cancellation_policy">
-                <?php _e('Cancellation Policy:', 'travel-packages'); ?>
-            </label>
-            <?php wp_editor($cancellation_policy, 'cancellation_policy', array('textarea_name' => 'cancellation_policy')); ?>
-        </div>
-        <div style="width: 50%;">
-            <label for="notes">
-                <?php _e('Special Notes:', 'travel-packages'); ?>
-            </label>
-            <?php wp_editor($notes, 'notes', array('textarea_name' => 'notes')); ?>
-        </div>
-    </div>
-
-    <hr class="clear-line">
     <?php
 }
 
@@ -837,20 +751,6 @@ register_activation_hook(__FILE__, 'create_travel_detail_page');
 
 // Travel destinations metabox
 
-// Add meta box for travel destinations
-add_action('add_meta_boxes', 'add_travel_destinations_meta_box');
-function add_travel_destinations_meta_box()
-{
-    add_meta_box(
-        'travel_destinations_meta_box', // Unique ID
-        'Travel Destinations', // Box title
-        'render_travel_destinations_meta_box', // Callback function
-        'travel-package', // Post type
-        'normal', // Position
-        'high' // Priority
-    );
-}
-
 // Render meta box for travel destinations
 function render_travel_destinations_meta_box($post)
 {
@@ -907,19 +807,6 @@ function enqueue_travel_package_scripts($hook)
 
 
 // Add meta box for activities
-add_action('add_meta_boxes', 'add_travel_package_activities_meta_box');
-function add_travel_package_activities_meta_box()
-{
-    add_meta_box(
-        'travel_package_activities_meta_box', // Unique ID
-        'Activities', // Box title
-        'render_travel_package_activities_meta_box', // Callback function
-        'travel-package', // Post type
-        'normal', // Position
-        'high' // Priority
-    );
-}
-
 // Render meta box for activities
 function render_travel_package_activities_meta_box($post)
 {
@@ -962,4 +849,138 @@ function save_travel_package_activities_meta_box($post_id)
     // Sanitize and save activities
     $sanitized_activities = array_map('sanitize_text_field', $activities);
     update_post_meta($post_id, 'activities', $sanitized_activities);
+}
+
+// Travel Include & Exclude metabox
+
+// Render meta box for travel destinations
+function render_package_include_exclude_meta_box($post)
+{
+    // Retrieve the current travel destinations
+    $package_includes = get_post_meta($post->ID, 'package_includes', true);
+    $package_excludes = get_post_meta($post->ID, 'package_excludes', true);
+
+    // Output the HTML form fields
+    ?>
+    <div style="display: flex;">
+        <div style="width: 50%; margin-right: 10px;">
+            <label for="package_includes">
+                <?php _e('Package Includes:', 'travel-packages'); ?>
+            </label>
+            <?php wp_editor($package_includes, 'package_includes', array('textarea_name' => 'package_includes')); ?>
+        </div>
+        <div style="width: 50%;">
+            <label for="package_excludes">
+                <?php _e('Package Excludes:', 'travel-packages'); ?>
+            </label>
+            <?php wp_editor($package_excludes, 'package_excludes', array('textarea_name' => 'package_excludes')); ?>
+        </div>
+    </div>
+    <?php
+}
+
+// Terms and conditions metabox
+
+// Render meta box for travel destinations
+function render_terms_conditions_meta_box($post)
+{
+    // Retrieve the terms and conditions
+    $highlights = get_post_meta($post->ID, 'highlights', true);
+    $general_conditions = get_post_meta($post->ID, 'general_conditions', true);
+
+    $cancellation_policy = get_post_meta($post->ID, 'cancellation_policy', true);
+    $notes = get_post_meta($post->ID, 'notes', true);
+
+    // Output the HTML form fields
+    ?>
+
+    <div style="display: flex;">
+        <div style="width: 50%; margin-right: 10px;">
+            <label for="highlights">
+                <?php _e('Highlights:', 'travel-packages'); ?>
+            </label>
+            <?php wp_editor($highlights, 'highlights', array('textarea_name' => 'highlights')); ?>
+        </div>
+        <div style="width: 50%;">
+            <label for="general_conditions">
+                <?php _e('General Conditions:', 'travel-packages'); ?>
+            </label>
+            <?php wp_editor($general_conditions, 'general_conditions', array('textarea_name' => 'general_conditions')); ?>
+        </div>
+    </div>
+
+    <div style="display: flex;">
+        <div style="width: 50%; margin-right: 10px;">
+            <label for="cancellation_policy">
+                <?php _e('Cancellation Policy:', 'travel-packages'); ?>
+            </label>
+            <?php wp_editor($cancellation_policy, 'cancellation_policy', array('textarea_name' => 'cancellation_policy')); ?>
+        </div>
+        <div style="width: 50%;">
+            <label for="notes">
+                <?php _e('Special Notes:', 'travel-packages'); ?>
+            </label>
+            <?php wp_editor($notes, 'notes', array('textarea_name' => 'notes')); ?>
+        </div>
+    </div>
+    <?php
+}
+
+// Add meta box for photos
+add_action('add_meta_boxes', 'add_travel_package_meta_boxes');
+function add_travel_package_meta_boxes()
+{
+    add_meta_box(
+        'travel-package-details',
+        __('Travel Package Details', 'travel-packages'),
+        'render_travel_package_details_meta_box',
+        'travel-package',
+        'normal',
+        'high'
+    );
+
+    add_meta_box(
+        'travel_destinations_meta_box', // Unique ID
+        'Travel Destinations', // Box title
+        'render_travel_destinations_meta_box', // Callback function
+        'travel-package', // Post type
+        'normal', // Position
+        'default' // Priority
+    );
+
+    add_meta_box(
+        'travel_package_activities_meta_box', // Unique ID
+        'Activities', // Box title
+        'render_travel_package_activities_meta_box', // Callback function
+        'travel-package', // Post type
+        'normal', // Position
+        'default' // Priority
+    );
+
+    add_meta_box(
+        'travel_package_photos_meta_box', // Unique ID
+        'Gallery Photos', // Box title
+        'render_travel_package_photos_meta_box', // Callback function
+        'travel-package', // Post type
+        'normal', // Position
+        'default' // Priority
+    );
+
+    add_meta_box(
+        'package_include_exclude_meta_box', // Unique ID
+        'Package Includes & Excludes', // Box title
+        'render_package_include_exclude_meta_box', // Callback function
+        'travel-package', // Post type
+        'normal', // Position
+        'default' // Priority
+    );
+
+    add_meta_box(
+        'terms_conditions_meta_box', // Unique ID
+        'Terms and Conditions', // Box title
+        'render_terms_conditions_meta_box', // Callback function
+        'travel-package', // Post type
+        'normal', // Position
+        'low' // Priority
+    );
 }
