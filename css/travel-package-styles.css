@@ -187,41 +187,122 @@
     padding-bottom: 50px;
   }
 
+.package-include-exclue,
+.photo-detail-flexbox,
+.map-view {
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 50px;
+}
+
+.package-include-exclue .package-includes,
+.photo-detail-flexbox .photo-flex {
+  flex-basis: 50%;
+}
+
+.package-include-exclue .package-excludes,
+.photo-detail-flexbox .cost-duration-country-flex {
+  flex-basis: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.country-detail,
+.duration-detail,
+.cost-detail,
+.travel-destinations-detail,
+.travel-activities-detail {
+  margin-left: 30px;
+  padding-bottom: 20px;
+}
+
+.cost,
+.country,
+.duration,
+.travel-destinations,
+.travel-activities {
+  margin-left: 30px;
+}
+
+.country-duration-flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.country-detail,
+.duration-detail {
+  flex-basis: 50%;
+}
+
+.country-detail label,
+.duration-detail label {
+  display: block;
+  font-weight: bold;
+}
+
+.country-detail .country,
+.duration-detail .duration {
+  display: flex;
+  align-items: center;
+}
+
+.country-detail .country i,
+.duration-detail .duration i {
+  margin-right: 5px;
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
   .package-include-exclue,
   .photo-detail-flexbox,
   .map-view {
-    display: flex;
-    flex-wrap: wrap;
-    padding-bottom: 50px;
+    flex-direction: column;
   }
 
   .package-include-exclue .package-includes,
-  .photo-detail-flexbox .photo-flex {
-    flex-basis: 50%;
-  }
-
+  .photo-detail-flexbox .photo-flex,
   .package-include-exclue .package-excludes,
   .photo-detail-flexbox .cost-duration-country-flex {
-    flex-basis: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; /* Add this line */
+    flex-basis: 100%;
+  }
+
+  .photo-detail-flexbox .photo-flex {
+    padding-bottom: 20px;
+  }
+  
+  .country-detail,
+  .duration-detail {
+    flex-basis: 100%;
+    margin-left: 0;
   }
 
   .country-detail,
   .duration-detail,
   .cost-detail,
-  .travel-destinations-detail {
-    margin-left: 30px;
-    padding-bottom: 20px;
+  .travel-destinations-detail,
+  .travel-activities-detail {
+    margin-left: 0;
   }
 
   .cost,
   .country,
   .duration,
-  .travel-destinations {
-    margin-left: 30px;
+  .travel-destinations,
+  .travel-activities {
+    margin-left: 10px;
   }
+  
+  .duration-detail label {
+    white-space: nowrap; /* Add this line */
+  }
+
+  .package-detail-thumbnail img {
+    height: auto;
+  }
+}
+
+  
 
   .travel-plan {
     display: flex;
@@ -280,6 +361,24 @@
   background-color: #ccc !important;
 }
 
+/* Mobile View for tabs*/
+@media (max-width: 768px) {
+  .tab {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .tab button {
+    flex: 1 0 50%; /* Adjust the margin value accordingly */
+    margin: 4px;
+    box-sizing: border-box;
+    text-align: center;
+    white-space: nowrap; /* Add this line */
+    overflow: hidden; /* Add this line */
+    text-overflow: ellipsis; /* Add this line */
+  }
+}
+
 /* Add photo album uploading stylings */
 .add-photos-container {
   display: flex;
@@ -328,13 +427,36 @@
   object-fit: cover;
 }
 
+/* Mobile View */
+@media (max-width: 768px) {
+  .photo-album a {
+    margin: 10px;
+    width: calc(50% - 20px); /* Adjust the margin value accordingly */
+    max-width: calc(50% - 20px); /* Adjust the margin value accordingly */
+    height: 0;
+    padding-bottom: 30%; /* Adjust the aspect ratio (height / width) value accordingly */
+    position: relative;
+  }
+  
+  .photo-album img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
 /* Travel Destinations */
-.travel-destinations {
+.travel-destinations,
+.travel-activities {
   display: flex;
   flex-wrap: wrap;
 }
 
-.travel-destination {
+.travel-destination,
+.travel-activity {
   padding-left: 10px;
   margin-bottom: 10px;
   white-space: nowrap;
