@@ -87,8 +87,10 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                                 </div>
                                 <div class="duration">
                                     <?php
-                                        if (!empty($duration_days) && !empty($duration_nights)) {
-                                            echo '<i class="fa fa-clock"></i> <span>'. esc_html($duration_days) . ' Days ' . esc_html($duration_nights) . ' Nights</span>';
+                                    $day = (!empty($duration_days) && (int)$duration_days > 1) ? ' Days ' : ' Day ';
+                                    $night = (!empty($duration_nights) && (int)$duration_nights > 1) ? ' Nights</span>' : ' Night</span>';
+                                        if (!empty($duration_days) || !empty($duration_nights)) {
+                                            echo '<i class="fa fa-clock"></i> <span>'. esc_html($duration_days) . (!empty($duration_days) ? $day : '') . esc_html($duration_nights) . (!empty($duration_nights) ? $night : '</span>');
                                         }
                                     ?>
                                 </div>
@@ -136,16 +138,16 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                             <div class="cost">
                                 <?php
                                     if (!empty($cost2pax)) {
-                                        echo '<i class="fa fa-user"></i>x<strong>2</strong><span> person group: ' . esc_html($cost2pax) . ' p.person</span><br>';
+                                        echo '<i class="fa fa-user"></i>x<strong>2</strong><span> pax group: ' . esc_html(number_format($cost2pax, 2, '.', ',')) . '&#2547; /person</span><br>';
                                     }
                                     if (!empty($cost4pax)) {
-                                        echo '<i class="fa fa-user"></i>x<strong>4</strong><span> person group: ' . esc_html($cost4pax) . ' p.person</span><br>';
+                                        echo '<i class="fa fa-user"></i>x<strong>4</strong><span> pax group: ' . esc_html(number_format($cost4pax, 2, '.', ',')) . '&#2547; /person</span><br>';
                                     }
                                     if (!empty($cost6pax)) {
-                                        echo '<i class="fa fa-user"></i>x<strong>6</strong><span> person group: ' . esc_html($cost6pax) . ' p.person</span><br>';
+                                        echo '<i class="fa fa-user"></i>x<strong>6</strong><span> pax group: ' . esc_html(number_format($cost6pax, 2, '.', ',')) . '&#2547; /person</span><br>';
                                     }
                                     if (!empty($cost8pax)) {
-                                        echo '<i class="fa fa-user"></i>x<strong>8</strong><span> person group: ' . esc_html($cost8pax) . ' p.person</span><br>';
+                                        echo '<i class="fa fa-user"></i>x<strong>8</strong><span> pax group: ' . esc_html(number_format($cost8pax, 2, '.', ',')) . '&#2547; /person</span><br>';
                                     }
                                 ?>
                             </div>
@@ -163,8 +165,8 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                         }
                     ?>
                 </div>
-                <div class="travel-plan">
-                    <h3>Itinerary</h3>
+                <div class="itinerary">
+                    Itinerary
                 </div>
                 <div class="package-detail">
                     <?php echo apply_filters('the_content', $package->post_content);?>
