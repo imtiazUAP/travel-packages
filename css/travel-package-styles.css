@@ -115,6 +115,17 @@
     padding: 10px 0;
   }
 
+  /* CSS for center alignment */
+.pagination-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pagination {
+  margin-top: 20px; /* Add some spacing between packages and pagination */
+}
+
 
   /* Template CSS */
   .container {
