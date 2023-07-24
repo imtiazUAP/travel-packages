@@ -116,7 +116,7 @@ function travel_packages_shortcode($atts)
                         <div class="thumbnail-overlay">
                             <div style="display: flex;">
                                 <div class="travel-package-duration-thumb" style="width: 50%;">
-                                    <i class="fa-regular fa-clock"></i>
+                                    <i class="fa fa-clock"></i>
                                     <?php echo $durationDays; ?> Days
                                     <?php echo $durationNights; ?> Nights
                                 </div>
