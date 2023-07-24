@@ -1,0 +1,155 @@
+/* Travel packages list CSS (SHORTCODE) */
+
+.travel-package-grid {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.travel-package-item {
+    width: 33.33%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.travel-package-item.last-in-row {
+    margin-right: 0;
+}
+
+.travel-package-item img {
+    max-width: 100%;
+    height: auto;
+}
+
+.travel-package-item h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.travel-package-item p {
+    font-size: 14px;
+}
+
+.travel-package-title {
+    font-size: 14;
+    color: black;
+}
+
+.travel-package-duration {
+    font-size: 14;
+    color: black;
+}
+
+.travel-package-thumbnail {
+    position: relative;
+    overflow: hidden;
+    height: 200px;
+    border-radius: 16px;
+}
+
+.travel-package-thumbnail img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.thumbnail-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 0 0 16px 16px;
+    color: white;
+}
+
+.thumbnail-overlay>div {
+    margin-bottom: 5px;
+}
+
+.thumbnail-overlay>div i {
+    margin-right: 5px;
+}
+
+.thumbnail-overlay .travel-package-duration-thumb,
+.thumbnail-overlay .travel-package-country {
+    font-weight: lighter;
+}
+
+.thumbnail-overlay .travel-package-cost2pax div {
+    font-weight: lighter;
+}
+
+.travel-package-thumbnail-title {
+    padding: 10px;
+}
+
+.travel-package-search-box {
+    padding: 10px;
+}
+
+hr.clear-line {
+    margin-top: 20px !important;
+    padding: 20px !important;
+    border: none;
+    border-top: 1px solid black;
+}
+
+hr.clear-line-white {
+    border: none;
+    border-top: 1px solid whitesmoke;
+}
+
+.cost-box {
+    padding: 10px 0;
+}
+
+/* CSS for center alignment */
+.pagination-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+/* Search box design */
+
+.travel-package-search-box {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.travel-package-search-box .select-box {
+    flex-basis: 80%;
+}
+
+.travel-package-search-box .search-button {
+    flex-basis: 20%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Mobile View CSS for travel packages list */
+@media (max-width: 767px) {
+    .travel-package-item {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .thumbnail-overlay {
+        font-size: 12px;
+    }
+
+    .travel-package-search-box .select-box,
+    .travel-package-search-box .search-button {
+        flex-basis: 100%;
+        padding-top: 5px;
+    }
+
+    .travel-package-search-box .search-button div {
+        width: 100%;
+    }
+}
