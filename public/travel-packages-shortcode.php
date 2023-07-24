@@ -57,7 +57,8 @@ function travel_packages_shortcode($atts)
                 </div>
                 <div class="form-group search-button">
                     <div style="position: relative;">
-                        <span class="fa fa-search" style="color: white; position: absolute; top: 50%; left: 10px; transform: translateY(-50%);"></span>
+                        <span class="fa fa-search"
+                            style="color: white; position: absolute; top: 50%; left: 10px; transform: translateY(-50%);"></span>
                         <input type="submit" value="Find Travel Packages" style="height: 50px; width: 100%;">
                     </div>
                 </div>
@@ -116,7 +117,8 @@ function travel_packages_shortcode($atts)
                             <div style="display: flex;">
                                 <div class="travel-package-duration-thumb" style="width: 50%;">
                                     <i class="fa-regular fa-clock"></i>
-                                    <?php echo $durationDays; ?> Days <?php echo $durationNights; ?> Nights
+                                    <?php echo $durationDays; ?> Days
+                                    <?php echo $durationNights; ?> Nights
                                 </div>
                                 <div class="travel-package-country" style="width: 50%;">
                                     <i class="fas fa-map-marker-alt"></i>
@@ -159,13 +161,17 @@ function travel_packages_shortcode($atts)
         echo '</div>';
 
         // Generate pagination links with custom labels
-        $pagination_links = paginate_links(array(
-            'current' => $current_page,
-            'total' => $total_pages,
-            'format' => '?tp_page=%#%', // The format for the pagination parameter in the URL
-            'prev_text' => '<< Prev', // Label for the previous page link
-            'next_text' => 'Next >>', // Label for the next page link
-        ));
+        $pagination_links = paginate_links(
+            array(
+                'current' => $current_page,
+                'total' => $total_pages,
+                'format' => '?tp_page=%#%',
+                // The format for the pagination parameter in the URL
+                'prev_text' => '<< Prev',
+                // Label for the previous page link
+                'next_text' => 'Next >>', // Label for the next page link
+            )
+        );
 
         if ($pagination_links) {
             echo '<div class="pagination-wrapper">';

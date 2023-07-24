@@ -138,11 +138,16 @@ function add_travel_package_meta_boxes()
     );
 
     add_meta_box(
-        'travel_destinations_meta_box', // Unique ID
-        'Travel Destinations', // Box title
-        'render_travel_destinations_meta_box', // Callback function
-        'travel-package', // Post type
-        'normal', // Position
+        'travel_destinations_meta_box',
+        // Unique ID
+        'Travel Destinations',
+        // Box title
+        'render_travel_destinations_meta_box',
+        // Callback function
+        'travel-package',
+        // Post type
+        'normal',
+        // Position
         'default' // Priority
     );
 

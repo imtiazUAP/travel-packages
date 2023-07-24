@@ -1,0 +1,28 @@
+/* Create Package CSS */
+
+/* Add photo album uploading stylings */
+.add-photos-container {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.photos-container label {
+    margin-right: 10px;
+}
+
+.uploaded-photos-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.uploaded-photos {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.uploaded-photo {
+    margin-right: 10px;
+}

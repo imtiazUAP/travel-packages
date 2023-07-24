@@ -33,10 +33,16 @@ function render_travel_package_details_meta_box($post)
         </div>
 
         <div style="flex-basis: 50%;">
-            <label for="duration_days"><Strong><?php _e('Days:', 'travel-packages'); ?></Strong></label>
-            <input type="text" id="duration_days" name="duration_days" placeholder="Ex: 4" value="<?php echo esc_attr($durationDays); ?>">
-            <label for="duration_nights"><Strong><?php _e('Nights:', 'travel-packages'); ?></Strong></label>
-            <input type="text" id="duration_nights" name="duration_nights" placeholder="Ex: 5" value="<?php echo esc_attr($durationNights); ?>">
+            <label for="duration_days"><Strong>
+                    <?php _e('Days:', 'travel-packages'); ?>
+                </Strong></label>
+            <input type="text" id="duration_days" name="duration_days" placeholder="Ex: 4"
+                value="<?php echo esc_attr($durationDays); ?>">
+            <label for="duration_nights"><Strong>
+                    <?php _e('Nights:', 'travel-packages'); ?>
+                </Strong></label>
+            <input type="text" id="duration_nights" name="duration_nights" placeholder="Ex: 5"
+                value="<?php echo esc_attr($durationNights); ?>">
         </div>
     </div>
 
@@ -53,7 +59,8 @@ function render_travel_package_details_meta_box($post)
                 <label for="cost2pax">
                     <?php _e('2 Pax:', 'travel-packages'); ?>
                 </label>
-                <input type="text" id="cost2pax" name="cost2pax" placeholder="Ex: 29999" value="<?php echo esc_attr($cost2pax); ?>">
+                <input type="text" id="cost2pax" name="cost2pax" placeholder="Ex: 29999"
+                    value="<?php echo esc_attr($cost2pax); ?>">
             </div>
             <div style="flex-basis: 20%;" class="cost">
                 <label for="cost4pax">
@@ -83,7 +90,8 @@ function render_travel_package_details_meta_box($post)
 
     <div style="padding-left:40px; padding-right:40px; padding-bottom:10px;">
         <textarea id="map_url" name="map_url" class="custom-textarea"
-            style="display: inline-block; width: 100%; height: 100px;" placeholder="Generate travel map using google map and paste the url here..."><?php echo esc_textarea($map_url); ?></textarea>
+            style="display: inline-block; width: 100%; height: 100px;"
+            placeholder="Generate travel map using google map and paste the url here..."><?php echo esc_textarea($map_url); ?></textarea>
     </div>
     <?php
 }

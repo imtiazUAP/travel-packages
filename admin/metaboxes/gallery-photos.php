@@ -27,41 +27,41 @@ function render_travel_package_photos_meta_box($post)
     </div>
 
     <script>
-        jQuery(document).ready(function($) {
-            $('#save-photos-button').click(function() {
-                    var formData = new FormData();
-                    var files = $('#travel-package-photos')[0].files;
-                    var postID = <?php echo get_the_ID(); ?>;
+        jQuery(document).ready(function ($) {
+            $('#save-photos-button').click(function () {
+                var formData = new FormData();
+                var files = $('#travel-package-photos')[0].files;
+                var postID = <?php echo get_the_ID(); ?>;
 
-                    for (var i = 0; i < files.length; i++) {
-                        formData.append('travel-package-photos[]', files[i]);
-                    }
-                    formData.append('post_id', postID);
+                for (var i = 0; i < files.length; i++) {
+                    formData.append('travel-package-photos[]', files[i]);
+                }
+                formData.append('post_id', postID);
 
-                    // Send AJAX request to save the photos
-                    $.ajax({
-                        url: '<?php echo rest_url('travel-package-photos/v1/save'); ?>',
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        beforeSend: function(xhr) {
-                            xhr.setRequestHeader('X-WP-Nonce', '<?php echo wp_create_nonce('wp_rest'); ?>'); // Update with the correct nonce name
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                // Clear the file input field
-                                $('#travel-package-photos').val('');
+                // Send AJAX request to save the photos
+                $.ajax({
+                    url: '<?php echo rest_url('travel-package-photos/v1/save'); ?>',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('X-WP-Nonce', '<?php echo wp_create_nonce('wp_rest'); ?>'); // Update with the correct nonce name
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            // Clear the file input field
+                            $('#travel-package-photos').val('');
 
-                                // Update the uploaded photos container
-                                $('#uploaded-photos-container').html(response.html);
-                            }
+                            // Update the uploaded photos container
+                            $('#uploaded-photos-container').html(response.html);
                         }
-                    });
+                    }
+                });
             });
         });
     </script>
-<?php
+    <?php
 }
 
 // Upload gallery photos
@@ -97,12 +97,13 @@ add_action('rest_api_init', 'register_save_travel_package_photos_endpoint');
 function register_save_travel_package_photos_endpoint()
 {
     register_rest_route('travel-package-photos/v1', '/save', array(
-        'methods'  => 'POST',
+        'methods' => 'POST',
         'callback' => 'save_travel_package_photos',
         'permission_callback' => function () {
             return current_user_can('edit_posts');
         },
-    ));
+    )
+    );
 }
 
 // Callback function to handle photo saving
@@ -134,16 +135,20 @@ function save_travel_package_photos($request)
         // Update the meta field with the uploaded photos
         update_post_meta($post_id, 'photos', $uploaded_photos);
 
-        return rest_ensure_response(array(
-            'success' => true,
-            'html' => get_uploaded_photos_html($uploaded_photos)
-        ));
+        return rest_ensure_response(
+            array(
+                'success' => true,
+                'html' => get_uploaded_photos_html($uploaded_photos)
+            )
+        );
     }
 
-    return rest_ensure_response(array(
-        'success' => false,
-        'message' => 'No photos uploaded'
-    ));
+    return rest_ensure_response(
+        array(
+            'success' => false,
+            'message' => 'No photos uploaded'
+        )
+    );
 }
 
 // Helper function to generate HTML for uploaded photos

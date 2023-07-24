@@ -1,29 +1,38 @@
 <?php
-
-// Enqueing custom CSS file
-function enqueue_travel_package_styles()
+// ADMIN CSS: Enqueing CSS file for travel packages administration
+function enqueue_travel_packages_admin_styles()
 {
-    wp_enqueue_style('travel-package-styles', plugin_dir_url(__FILE__) . '../css/travel-package-styles.css');
+    wp_enqueue_style('create-travel-package-styles', plugin_dir_url(__FILE__) . '../css/create-travel-package-styles.css');
 }
-add_action('wp_enqueue_scripts', 'enqueue_travel_package_styles');
-add_action('admin_enqueue_scripts', 'enqueue_travel_package_styles');
+add_action('admin_enqueue_scripts', 'enqueue_travel_packages_admin_styles');
+
+// PUBLIC CSS: Enqueing CSS file for travel packages public view (travel packages shortcode, travel detail)
+function enqueue_travel_packages_public_styles()
+{
+    wp_enqueue_style('travel-packages-shortcode', plugin_dir_url(__FILE__) . '../css/travel-packages-shortcode.css');
+    wp_enqueue_style('package-detail-template-styles', plugin_dir_url(__FILE__) . '../css/package-detail-template-styles.css');
+}
+add_action('wp_enqueue_scripts', 'enqueue_travel_packages_public_styles');
 
 // Enqueing font-awesome icons
-function enqueue_plugin_styles() {
+function enqueue_plugin_styles()
+{
     wp_enqueue_style('font-awesome', 'https://use.fontawesome.com/releases/v5.13.0/css/all.css', array(), '5.13.0');
 }
 
 add_action('wp_enqueue_scripts', 'enqueue_plugin_styles');
 
 // Enqueing custom javascript for terms and conditions
-function enqueue_terms_conditions_tabs_scripts() {
+function enqueue_terms_conditions_tabs_scripts()
+{
     wp_enqueue_script('terms-conditions-tabs-scripts-script', plugin_dir_url(__FILE__) . '../scripts/javascripts/terms-conditions-tabs-scripts.js', array('jquery'), '1.0', true);
 }
 
 add_action('wp_enqueue_scripts', 'enqueue_terms_conditions_tabs_scripts');
 
-// Enqueing custom javascript for travel-packages-shortcode
-function enqueue_travel_packages_shortcode() {
+// Enqueing custom javascript for travel-packages-filter
+function enqueue_travel_packages_shortcode()
+{
     wp_enqueue_script('travel-packages-shortcode-script', plugin_dir_url(__FILE__) . '../scripts/javascripts/travel-packages-filter.js', array('jquery'), '1.0', true);
 }
 
