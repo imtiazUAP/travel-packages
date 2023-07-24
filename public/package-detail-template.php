@@ -107,7 +107,7 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                                     foreach ($travel_destinations as $travel_destination) {
                                         if (!empty($travel_destination)) {
                                             echo '<div class="travel-destination">';
-                                            echo '<i class="fa fa-map-location-dot"></i> <span>' . esc_html(ucfirst($travel_destination)) . '</span>';
+                                            echo '<i class="fa fa-map"></i> <span>' . esc_html(ucfirst($travel_destination)) . '</span>';
                                             echo '</div>';
                                         }
                                     }
