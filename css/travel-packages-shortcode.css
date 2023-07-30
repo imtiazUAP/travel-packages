@@ -42,7 +42,7 @@
 .travel-package-thumbnail {
     position: relative;
     overflow: hidden;
-    height: 200px;
+    height: auto;
     border-radius: 16px;
 }
 
