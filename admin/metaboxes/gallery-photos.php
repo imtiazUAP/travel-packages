@@ -6,12 +6,17 @@ function render_travel_package_photos_meta_box($post)
     $photos = get_post_meta($post->ID, 'photos', true);
     ?>
 
-    <div class="add-photos-container">
+    <div class="add-photos-container" id="add-photos-container">
         <label for="travel-package-photos">Add Gallery Photos (Maximum 6):</label>
         <input type="file" id="travel-package-photos" name="travel-package-photos[]" multiple accept="image/*">
         <button type="button" id="save-photos-button">Save Photos</button>
     </div>
 
+
+    <div id="loader-container" style="display: none;">
+        <img src="<?php echo plugin_dir_url(__FILE__) .'../../images/loader.gif'; ?>" alt="Uploading...">
+        <span>Uploading gallery photos...</span>
+    </div>
 
     <div id="uploaded-photos-container" class="uploaded-photos-container">
         <?php
@@ -38,6 +43,10 @@ function render_travel_package_photos_meta_box($post)
                 }
                 formData.append('post_id', postID);
 
+                // Show the loader GIF while photos are uploading
+                $('#loader-container').show();
+                $('#add-photos-container').hide();
+
                 // Send AJAX request to save the photos
                 $.ajax({
                     url: '<?php echo rest_url('travel-package-photos/v1/save'); ?>',
@@ -50,12 +59,20 @@ function render_travel_package_photos_meta_box($post)
                     },
                     success: function (response) {
                         if (response.success) {
+                            $('#loader-container').hide();
+                            $('#add-photos-container').show();
+
                             // Clear the file input field
                             $('#travel-package-photos').val('');
 
                             // Update the uploaded photos container
                             $('#uploaded-photos-container').html(response.html);
                         }
+                    },
+                    error: function () {
+                        // Hide the loader GIF on error
+                        $('#loader-container').hide();
+                        $('#add-photos-container').show();
                     }
                 });
             });
@@ -67,6 +84,8 @@ function render_travel_package_photos_meta_box($post)
 // Upload gallery photos
 function upload_photo($photo_tmp, $photo_name)
 {
+    require_once(ABSPATH . 'wp-admin/includes/image.php'); // Load the necessary image handling functions
+
     $photo_name = sanitize_file_name($photo_name); // Sanitize the photo name
     $photo_extension = pathinfo($photo_name, PATHINFO_EXTENSION); // Get the photo extension
     $upload_dir = wp_upload_dir(); // Retrieve the WordPress uploads directory information
@@ -85,7 +104,33 @@ function upload_photo($photo_tmp, $photo_name)
 
     // Move the uploaded photo to the target directory
     if (move_uploaded_file($photo_tmp, $target_file)) {
-        return $photo_url; // Return the URL of the uploaded photo
+        // Get the image editor
+        $image_editor = wp_get_image_editor($target_file);
+
+        if (!is_wp_error($image_editor)) {
+            // Get the original image dimensions
+            $image_size = $image_editor->get_size();
+            $original_width = $image_size['width'];
+
+            // Set the maximum width for the image
+            $max_width = 1000;
+
+            // Calculate the new height while maintaining the aspect ratio
+            $new_width = min($max_width, $original_width);
+            $new_height = intval($new_width * ($image_size['height'] / $original_width));
+
+            // Resize the image
+            $image_editor->resize($new_width, $new_height);
+
+            // Save the resized image
+            $resized_image = $image_editor->save($target_file);
+
+            if (!is_wp_error($resized_image)) {
+                $photo_url = $upload_dir['url'] . '/' . $resized_image['file'];
+            }
+        }
+
+        return $photo_url; // Return the URL of the uploaded and resized photo
     } else {
         return false; // Return false if the upload process failed
     }
