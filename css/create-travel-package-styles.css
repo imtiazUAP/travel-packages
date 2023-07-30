@@ -25,4 +25,14 @@
 
 .uploaded-photo {
     margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+#loader-container {
+    display: flex;
+    align-items: center;
+}
+
+#loader-container img {
+    margin-right: 10px;
 }

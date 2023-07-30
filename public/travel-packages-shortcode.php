@@ -90,7 +90,8 @@ function travel_packages_shortcode($atts)
         while ($packages->have_posts()) {
             $packages->the_post();
 
-            $package_image = get_the_post_thumbnail_url(get_the_ID(), 'large');
+            // getting the thumbnail to show in the list
+            $package_image = get_the_post_thumbnail_url(get_the_ID(), 'package-thumbnail');
 
             // Retrieve the value of the cost2pax custom attribute
             $durationDays = get_post_meta(get_the_ID(), 'duration_days', true);

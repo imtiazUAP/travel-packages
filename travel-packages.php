@@ -55,6 +55,13 @@ function travel_packages_custom_post_type()
 }
 add_action('init', 'travel_packages_custom_post_type');
 
+// Add custom image size for package thumbnails
+function travel_packages_add_custom_image_sizes()
+{
+    add_image_size('package-thumbnail', 400, 300, true); // Adjust width and height as per your requirements
+}
+add_action('init', 'travel_packages_add_custom_image_sizes');
+
 // // Elementor theme special: Register the custom page template for package detail page
 // function custom_register_template($templates)
 // {
