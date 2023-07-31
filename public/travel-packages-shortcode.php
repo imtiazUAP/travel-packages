@@ -6,9 +6,15 @@ function travel_packages_shortcode($atts)
     $atts = shortcode_atts(
         array(
             'limit' => -1,
+            'redirect' => '',
         ),
         $atts
     );
+
+    $on_search_redirect = isset($atts['redirect']) ? $atts['redirect'] : '';
+    // Pass the PHP value inline to the JavaScript file
+    $inline_script = 'var travelPackagesFilter = { redirectValue: "' . esc_js($on_search_redirect) . '" };';
+    wp_add_inline_script('travel-packages-shortcode-script', $inline_script);
 
     // Getting the country names for the country filter drop-down
     $allPackages = new WP_Query([
@@ -174,7 +180,7 @@ function travel_packages_shortcode($atts)
             )
         );
 
-        if ($pagination_links) {
+        if ($pagination_links && !$on_search_redirect) {
             echo '<div class="pagination-wrapper">';
             echo '<div class="pagination">';
             echo $pagination_links;

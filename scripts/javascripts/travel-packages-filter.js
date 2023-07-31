@@ -15,6 +15,11 @@ document.getElementById('package-filter-form').addEventListener('submit', functi
         url.searchParams.delete('tp_page'); // Remove tp_page from the URL
     }
 
-    window.location.href = url.href; // Redirect to filtered URL
+    // Check if the 'redirectValue' is not empty
+    if (travelPackagesFilter.redirectValue && travelPackagesFilter.redirectValue !== "") {
+        window.location.href = travelPackagesFilter.redirectValue + "?" + url.searchParams.toString();
+    } else {
+        window.location.href = url.href;
+    }
 });
   
