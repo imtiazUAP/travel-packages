@@ -9,8 +9,9 @@ add_action('admin_enqueue_scripts', 'enqueue_travel_packages_admin_styles');
 // PUBLIC CSS: Enqueing CSS file for travel packages public view (travel packages shortcode, travel detail)
 function enqueue_travel_packages_public_styles()
 {
-    wp_enqueue_style('travel-packages-shortcode', plugin_dir_url(__FILE__) . '../css/travel-packages-shortcode.css');
-    wp_enqueue_style('package-detail-template-styles', plugin_dir_url(__FILE__) . '../css/package-detail-template-styles.css');
+    $plugin_data = get_plugin_data(plugin_dir_path(__FILE__) . '../travel-packages.php');
+    wp_enqueue_style('travel-packages-shortcode', plugin_dir_url(__FILE__) . '../css/travel-packages-shortcode.css', array(), $plugin_data['Version']);
+    wp_enqueue_style('package-detail-template-styles', plugin_dir_url(__FILE__) . '../css/package-detail-template-styles.css', array(), $plugin_data['Version']);
 }
 add_action('wp_enqueue_scripts', 'enqueue_travel_packages_public_styles');
 

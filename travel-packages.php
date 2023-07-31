@@ -3,7 +3,7 @@
 Plugin Name: Travel Packages
 Plugin URI: https://imtiaz.cloud
 Description: Display travel packages on your website.
-Version: 1.6
+Version: 1.7
 Author: Imtiaz Ahmed
 Author URI: https://imtiaz.cloud
 License: GPL2
