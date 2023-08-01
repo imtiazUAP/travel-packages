@@ -5,6 +5,7 @@ function render_travel_package_details_meta_box($post)
 {
     // Retrieve the values of the package details attributes
     $country = get_post_meta($post->ID, 'country', true);
+    $cost1pax = get_post_meta($post->ID, 'cost1pax', true);
     $cost2pax = get_post_meta($post->ID, 'cost2pax', true);
     $cost4pax = get_post_meta($post->ID, 'cost4pax', true);
     $cost6pax = get_post_meta($post->ID, 'cost6pax', true);
@@ -56,11 +57,17 @@ function render_travel_package_details_meta_box($post)
     <div style="padding-left:40px; padding-bottom:20px;">
         <div style="display: flex; flex-wrap: wrap;">
             <div style="flex-basis: 20%;">
+                <label for="cost1pax">
+                    <?php _e('1 Pax:', 'travel-packages'); ?>
+                </label>
+                <input type="text" id="cost1pax" name="cost1pax" placeholder="Ex: 29999"
+                    value="<?php echo esc_attr($cost1pax); ?>">
+            </div>
+            <div style="flex-basis: 20%;">
                 <label for="cost2pax">
                     <?php _e('2 Pax:', 'travel-packages'); ?>
                 </label>
-                <input type="text" id="cost2pax" name="cost2pax" placeholder="Ex: 29999"
-                    value="<?php echo esc_attr($cost2pax); ?>">
+                <input type="text" id="cost2pax" name="cost2pax" value="<?php echo esc_attr($cost2pax); ?>">
             </div>
             <div style="flex-basis: 20%;" class="cost">
                 <label for="cost4pax">
@@ -107,6 +114,9 @@ function save_travel_package_details($post_id)
         update_post_meta($post_id, 'country', sanitize_text_field($_POST['country']));
     }
 
+    if (isset($_POST['cost1pax'])) {
+        update_post_meta($post_id, 'cost1pax', sanitize_text_field($_POST['cost1pax']));
+    }
     if (isset($_POST['cost2pax'])) {
         update_post_meta($post_id, 'cost2pax', sanitize_text_field($_POST['cost2pax']));
     }

@@ -34,6 +34,7 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                 $package_image = get_the_post_thumbnail_url($package->ID, 'large');
                 // Display custom attributes
                 $country = get_post_meta($package->ID, 'country', true);
+                $cost1pax = get_post_meta($package->ID, 'cost1pax', true);
                 $cost2pax = get_post_meta($package->ID, 'cost2pax', true);
                 $cost4pax = get_post_meta($package->ID, 'cost4pax', true);
                 $cost6pax = get_post_meta($package->ID, 'cost6pax', true);
@@ -138,6 +139,9 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                             </div>
                             <div class="cost">
                                 <?php
+                                if (!empty($cost1pax)) {
+                                    echo '<i class="fa fa-user"></i>x<strong>1</strong><span> pax group: ' . esc_html(number_format($cost1pax, 2, '.', ',')) . '&#2547; /person</span><br>';
+                                }
                                 if (!empty($cost2pax)) {
                                     echo '<i class="fa fa-user"></i>x<strong>2</strong><span> pax group: ' . esc_html(number_format($cost2pax, 2, '.', ',')) . '&#2547; /person</span><br>';
                                 }
