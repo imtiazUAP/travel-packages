@@ -34,7 +34,8 @@ add_action('wp_enqueue_scripts', 'enqueue_terms_conditions_tabs_scripts');
 // Enqueing custom javascript for travel-packages-filter
 function enqueue_travel_packages_shortcode()
 {
-    wp_enqueue_script('travel-packages-shortcode-script', plugin_dir_url(__FILE__) . '../scripts/javascripts/travel-packages-filter.js', array('jquery'), '1.0', true);
+    $plugin_data = get_plugin_data(plugin_dir_path(__FILE__) . '../travel-packages.php');
+    wp_enqueue_script('travel-packages-shortcode-script', plugin_dir_url(__FILE__) . '../scripts/javascripts/travel-packages-filter.js', array('jquery'), $plugin_data['Version'], true);
 }
 
 add_action('wp_enqueue_scripts', 'enqueue_travel_packages_shortcode');
