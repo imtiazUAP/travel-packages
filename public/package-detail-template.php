@@ -174,7 +174,7 @@ add_action('wp_enqueue_scripts', 'enqueue_lightbox_scripts');
                     Itinerary
                 </div>
                 <div class="package-detail">
-                    <?php echo apply_filters('the_content', $package->post_content); ?>
+                    <?php echo nl2br($package->post_content); ?>
                 </div>
 
                 <div class="package-include-exclue">
