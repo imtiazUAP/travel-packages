@@ -4,6 +4,11 @@
 
 The Travel Packages Plugin is designed to create and manage travel packages on your WordPress site. This plugin allows you to add detailed travel package information, including country, cost, duration, map URL, package inclusions, exclusions, and a photo album.
 
+![Travel Packages filter](https://github.com/imtiazUAP/travel-packages/raw/main/images/package-list.png)
+
+![Travel Package detail](https://github.com/imtiazUAP/travel-packages/raw/main/images/package-detail.png)
+
+
 ## Features
 
 - Create and manage travel packages.
