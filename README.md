@@ -18,7 +18,7 @@ The Travel Packages Plugin is designed to create and manage travel packages on y
 
 ## Installation
 
-1. Download the plugin zip file.
+1. Download the plugin as a zip file.
 2. Navigate to the WordPress admin dashboard.
 3. Go to Plugins > Add New > Upload Plugin.
 4. Choose the downloaded zip file and click "Install Now".
